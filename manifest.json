@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Contador.cloud Cookies",
+    "description": "Serviços dos governos e suas autarquias que usam recaptcha anti-bots.",
+    "version": "0.1",
+    "permissions": [
+        "cookies",
+        "tabs",
+        "contextMenus"
+    ],
+    "host_permissions": [
+        "https://*/*",
+        "http://*/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_icon": "icon.png",
+        "default_title": "Contador.Cloud"
+    },
+    "icons": {
+        "16": "icon.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
+    "author": {
+        "name": "Francisco Luz",
+        "email": "drupalista.com.br@gmail.com"
+    }
+}
