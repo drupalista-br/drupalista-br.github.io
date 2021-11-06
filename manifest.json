@@ -6,7 +6,9 @@
     "permissions": [
         "cookies",
         "tabs",
-        "contextMenus"
+        "contextMenus",
+        "notifications",
+        "scripting"
     ],
     "host_permissions": [
         "https://*/*",
