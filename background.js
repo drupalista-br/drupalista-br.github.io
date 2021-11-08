@@ -40,8 +40,10 @@ function actions() {
             "sso.acesso.gov.br": {
                 onPageLoad: {
                     /*methods: {
-                        // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
-                        dom: [() => {return document.title;}],
+                        dom: [
+                            // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
+                            () => {return document.title;}
+                        ],
                     },*/
                     send: true
                 }
@@ -61,8 +63,8 @@ function alert(title, message, interation = true) {
 }
 
 function dom(queries, done) {
-    let results = {};
-    let tabId = action.current.tabId;
+    const tabId = action.current.tabId;
+    const results = {};
     queries.forEach((query, index, queries) => {
         chrome.scripting.executeScript({target: {tabId: tabId}, func: query}, result => {
             results[index] = result;
@@ -74,23 +76,24 @@ function dom(queries, done) {
 }
 
 function cookies(done) {
+    let url;
+    const jar = {};
     const domains = action.domains;
-    const empty = jar => {
-        console.log(jar);
-
-        //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br", name: "ASP.NET_SessionId"});
-        //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br/autenticacao/login/govbrsso", name: "ECAC_NONCE_GOVBR"});
+    const remove = (domain, cookies) => {
+        cookies.forEach((cookie, index) => {
+            url = "https://" + domain + cookie.path;
+            chrome.cookies.remove({url: url, name: cookie.name});
+        });
     };
-    let jar = {};
 
     domains.forEach((domain, index, domains) => {
         chrome.cookies.getAll({ domain: domain }, cookies => {
             jar[domain] = cookies;
             isLastDomain = index === domains.length - 1;
-            if (isLastDomain) {
-                empty(jar);
+            remove(domain, cookies);
+
+            if (isLastDomain)
                 done(jar);
-            }
         });
     });
 }
@@ -106,8 +109,9 @@ function redirect(to, tabId) {
 }
 
 function send(body) {
-    console.log(body);
-    /*fetch(apiHost + '/' + endPoint, {
+    const endPoint = action.redirectTo;
+
+    fetch(endPoint, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(body),
@@ -115,11 +119,13 @@ function send(body) {
     //.then(response => response.json())
     //.then(data => {})
     .catch((error) => {
-        console.log("Error:", error);
-        alert("Error:", error);
-    });*/
+        // console.log("Error:", error);
+        // TODO:
+        // Url encode error and add it to endPoint
+        // as a query string.
+    });
 
-    redirect(action.redirectTo, action.current.tabId);
+    redirect(endPoint, action.current.tabId);
 }
 
 function runActions(triggeredBy) {
@@ -141,7 +147,7 @@ function runActions(triggeredBy) {
      * Nontheless I placed the endsHere for cases which the
      * current page is actually where the action really ends
      * and there is something we should tell the
-     * user before going ahead finishing the action.
+     * user before moving on.
      */
     if (message = hasAlert) {
         alert(...message);
@@ -213,18 +219,10 @@ function onUserTrigger() {
     runActions("onUserTrigger");
 }
 
-/**
- * User action triggered via extension menu located at
- * the right end of the address bar.
- */
+// Extensions at the right end of the address bar..
 chrome.action.onClicked.addListener(tab => onUserTrigger());
-/**
- * User action triggered when right clicking on the web page.
- */
+// When right clicking on the web page.
 chrome.contextMenus.onClicked.addListener((info, tab) => onUserTrigger());
-/**
- * Inserts this module into the pop up list available when right
- * clicking on the web page.
- */
+
 chrome.runtime.onStartup.addListener(contextMenu);
 chrome.runtime.onInstalled.addListener(contextMenu);
