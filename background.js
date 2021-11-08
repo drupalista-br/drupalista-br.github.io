@@ -1,3 +1,4 @@
+const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
 const contextMenu = () => {
     chrome.contextMenus.create({
         "id": "contadorCloudCookies",
@@ -8,12 +9,26 @@ const contextMenu = () => {
         ]
     });
 };
-const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
+let actionsList = null;
 let action = null;
+checkVersion();
+
+function checkVersion() {
+    // TODO:
+    // * set a LAST_CHECK cookie at api.contador.cloud with
+    //   5 days expiration date ( test to make sure the cookie
+    //   get destroyed after it has expired ).
+    // * if cookie is not there then check for new version.
+    // * issue a notification alert linking to the blog page
+    //   containing instructions on how to proceed the extension
+    //   refreshing.
+}
 
 function actions() {
-    // TODO: Load from github.
-    return {
+    if (actionsList) return actionsList;
+
+    // TODO: load it from github.
+    return actionsList = {
         ecac_acesso_gov_certificate: {
             "cav.receita.fazenda.gov.br": {
                 onUserTrigger: {
@@ -24,10 +39,10 @@ function actions() {
             },
             "sso.acesso.gov.br": {
                 onPageLoad: {
-                    methods: {
+                    /*methods: {
                         // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
                         dom: [() => {return document.title;}],
-                    },
+                    },*/
                     send: true
                 }
             }
@@ -60,7 +75,14 @@ function dom(queries, done) {
 
 function cookies(done) {
     const domains = action.domains;
+    const empty = jar => {
+        console.log(jar);
+
+        //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br", name: "ASP.NET_SessionId"});
+        //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br/autenticacao/login/govbrsso", name: "ECAC_NONCE_GOVBR"});
+    };
     let jar = {};
+
     domains.forEach((domain, index, domains) => {
         chrome.cookies.getAll({ domain: domain }, cookies => {
             jar[domain] = cookies;
@@ -73,13 +95,11 @@ function cookies(done) {
     });
 }
 
-function empty(jar) {
-    console.log(jar);
-
-    //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br", name: "ASP.NET_SessionId"});
-    //chrome.cookies.remove({url: "https://cav.receita.fazenda.gov.br/autenticacao/login/govbrsso", name: "ECAC_NONCE_GOVBR"});
-}
-
+/**
+ * Action ends here.
+ * It will always redirect back to contador.cloud
+ * either to its local or remote enviroment.
+ */
 function redirect(to, tabId) {
     action = null;
     chrome.tabs.update(tabId, {"url": to});
@@ -99,25 +119,34 @@ function send(body) {
         alert("Error:", error);
     });*/
 
-    //redirect(action.redirectTo, action.current.tabId);
+    redirect(action.redirectTo, action.current.tabId);
 }
 
-function run(triggeredBy) {
-    const hasAction = action;
-    const hasDom = action?.current?.triggers[triggeredBy]?.methods?.dom;
-    const hasAlert = action?.current?.triggers[triggeredBy]?.methods?.alert;
-    const goAhead = action?.current?.triggers[triggeredBy]?.send;
-    const sendToBot = (items = false) => cookies(jar => send({dom: items, cookies: jar, urls: action.urls}));
+function runActions(triggeredBy) {
+    const hasDom = action.current?.triggers[triggeredBy]?.methods?.dom;
+    const hasAlert = action.current?.triggers[triggeredBy]?.methods?.alert;
+    const endsHere = action.current?.triggers[triggeredBy]?.send;
+    const sendToBot = (items = false) => {
+        cookies(jar => {
+            send({dom: items, cookies: jar, urls: action.urls});
+        });
+    };
 
-    if (!hasAction) {
-        alert("Contado.Cloud", "Nada a ser feito.");
-        return;
-    }
-
+    /**
+     * Alert is gonna be placed only when the action
+     * ends elsewhere so the alert is an instruction
+     * on how to proceed in case the user triggers it
+     * before they should,
+     *
+     * Nontheless I placed the endsHere for cases which the
+     * current page is actually where the action really ends
+     * and there is something we should tell the
+     * user before going ahead finishing the action.
+     */
     if (message = hasAlert) {
         alert(...message);
 
-        if (!goAhead) return;
+        if (!endsHere) return;
     }
 
     if (queries = hasDom)
@@ -126,13 +155,19 @@ function run(triggeredBy) {
     sendToBot();
 }
 
+/**
+ * Executes on every page load. All of them.
+ */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
     const url = new URL(tab.url);
+    // Example: contadorCloud={"action":"ecac_acesso_gov_certificate","host":"local","uri":"test"}
+    //          gotta be url encoded otherwise chrome has issue with it.
     const bot = JSON.parse(url.searchParams.get("contadorCloud"));
     const sendToBot = () => action?.current?.triggers?.onPageLoad?.send;
     const hasAction = () => {
+        // New action beggins.
         if (bot) {
             action = {
                 name: bot.action,
@@ -144,6 +179,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return true;
         }
 
+        // Action has began on a page load before this one.
         if (action) {
             if (!actions()[action.name].hasOwnProperty(url.host)) {
                 alert("Atividade NÃO corresponde ao website " + url.host, "Caso o problema persista, entre em contado conosco ( Contador.Cloud ).");
@@ -152,12 +188,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             }
 
             action.current = {triggers: actions()[action.name][url.host]};
-            (() => {
-                if (action.urls.hasOwnProperty(url.host))
-                    return action.urls[url.host].push(tab.url);
+            if (action.urls.hasOwnProperty(url.host)) {
+                action.urls[url.host].push(tab.url);
+                return true;
+            }
 
-                action.urls[url.host] = [tab.url];
-            })();
+            action.urls[url.host] = [tab.url];
             return true;
         }
         return false;
@@ -166,19 +202,26 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (hasAction())
         action.current.tabId = tabId;
 
-    if(sendToBot())
-        run("onPageLoad");
+    if (sendToBot())
+        runActions("onPageLoad");
 });
+
+function onUserTrigger() {
+    if (!action)
+        return alert("Contado.Cloud", "Nada a ser feito.");
+
+    runActions("onUserTrigger");
+}
 
 /**
  * User action triggered via extension menu located at
  * the right end of the address bar.
  */
-chrome.action.onClicked.addListener(tab => run("onUserTrigger"));
+chrome.action.onClicked.addListener(tab => onUserTrigger());
 /**
  * User action triggered when right clicking on the web page.
  */
-chrome.contextMenus.onClicked.addListener((info, tab) => run("onUserTrigger"));
+chrome.contextMenus.onClicked.addListener((info, tab) => onUserTrigger());
 /**
  * Inserts this module into the pop up list available when right
  * clicking on the web page.
