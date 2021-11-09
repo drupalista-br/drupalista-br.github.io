@@ -166,9 +166,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
     const url = new URL(tab.url);
-    // Example: contadorCloud={"action":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
+    // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
     //          gotta be url encoded otherwise chrome has issue with it.
-    const bot = JSON.parse(url.searchParams.get("contadorCloud"));
+    const newAction = JSON.parse(url.searchParams.get("botAction"));
     const sendToBot = () => action?.current?.triggers?.onPageLoad?.send;
     const hasError = () => {
         if (!action) return false;
@@ -199,15 +199,14 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const hasAction = () => {
         const domain = url.host;
 
-        // New action beggins.
-        if (bot) {
-            const domains = Object.keys(actions()[bot.action]);
+        if (newAction) {
+            const domains = Object.keys(actions()[newAction.name]);
 
             action = {
-                name: bot.action,
-                current: {triggers: actions()[bot.action][domain]},
-                redirectTo: botHosts[bot.host] + "/" + bot.uri,
-                endPoint: botHosts[bot.host] + "/chrome",
+                name: newAction.name,
+                current: {triggers: actions()[newAction.name][domain]},
+                redirectTo: botHosts[newAction.host] + "/" + newAction.uri,
+                endPoint: botHosts[newAction.host] + "/chrome",
                 domains: domains,
                 urls: {[domain]: [tab.url]},
                 cycle: {current: 0, of: domains.length}
@@ -215,7 +214,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return true;
         }
 
-        // Action has began on a page load before this one.
+        // Previous page load action hasn't ended as yet.
         if (action) {
             const addCurrentUrl = () => {
                 if (action.urls.hasOwnProperty(domain))
