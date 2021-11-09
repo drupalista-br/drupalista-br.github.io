@@ -126,7 +126,7 @@ function send(body) {
     redirect(action.redirectTo, action.current.tabId);
 }
 
-function runActions(triggeredBy) {
+function runAction(triggeredBy) {
     const hasDom = action.current?.triggers[triggeredBy]?.methods?.dom;
     const hasAlert = action.current?.triggers[triggeredBy]?.methods?.alert;
     const endsHere = action.current?.triggers[triggeredBy]?.send;
@@ -168,7 +168,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const url = new URL(tab.url);
     // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
     //          gotta be url encoded otherwise chrome has issue with it.
-    const newAction = JSON.parse(url.searchParams.get("botAction"));
+    const queryString = JSON.parse(url.searchParams.get("botAction"));
     const sendToBot = () => action?.current?.triggers?.onPageLoad?.send;
     const hasError = () => {
         if (!action) return false;
@@ -198,24 +198,25 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     };
     const hasAction = () => {
         const domain = url.host;
+        const starting = () => {
+            if (!queryString) return false;
 
-        if (newAction) {
-            const domains = Object.keys(actions()[newAction.name]);
+            const domains = Object.keys(actions()[queryString.name]);
 
             action = {
-                name: newAction.name,
-                current: {triggers: actions()[newAction.name][domain]},
-                redirectTo: botHosts[newAction.host] + "/" + newAction.uri,
-                endPoint: botHosts[newAction.host] + "/chrome",
+                name: queryString.name,
+                current: {triggers: actions()[queryString.name][domain]},
+                redirectTo: botHosts[queryString.host] + "/" + queryString.uri,
+                endPoint: botHosts[queryString.host] + "/browser",
                 domains: domains,
                 urls: {[domain]: [tab.url]},
                 cycle: {current: 0, of: domains.length}
             };
             return true;
-        }
+        };
+        const inCourse = () => {
+            if (!action) return false;
 
-        // Previous page load action hasn't ended as yet.
-        if (action) {
             const addCurrentUrl = () => {
                 if (action.urls.hasOwnProperty(domain))
                     return action.urls[domain].push(tab.url);
@@ -227,7 +228,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             addCurrentUrl();
 
             return true;
-        }
+        };
+        if (starting() || inCourse()) return true;
+
         return false;
     };
 
@@ -241,14 +244,14 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         return send(error);
 
     if (sendToBot())
-        runActions("onPageLoad");
+        runAction("onPageLoad");
 });
 
 function onUserTrigger() {
     if (!action)
         return alert("Contado.Cloud", "Nada a ser feito.");
 
-    runActions("onUserTrigger");
+    runAction("onUserTrigger");
 }
 
 // From extensions icon at the right end of the address bar.
