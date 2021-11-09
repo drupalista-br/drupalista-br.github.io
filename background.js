@@ -76,11 +76,11 @@ function dom(queries, done) {
 }
 
 function cookies(done) {
-    let url;
     const jar = {};
     const domains = action.domains;
-    const remove = (domain, cookies) => {
-        cookies.forEach((cookie, index) => {
+    const eat = (domain, cookies) => {
+        let url;
+        cookies.forEach((cookie) => {
             url = "https://" + domain + cookie.path;
             chrome.cookies.remove({url: url, name: cookie.name});
         });
@@ -90,7 +90,7 @@ function cookies(done) {
         chrome.cookies.getAll({ domain: domain }, cookies => {
             jar[domain] = cookies;
             isLastDomain = index === domains.length - 1;
-            remove(domain, cookies);
+            eat(domain, cookies); // 🍪👹
 
             if (isLastDomain)
                 done(jar);
@@ -109,9 +109,7 @@ function redirect(to, tabId) {
 }
 
 function send(body) {
-    const endPoint = action.redirectTo;
-
-    fetch(endPoint, {
+    fetch(action.endPoint, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(body),
@@ -121,11 +119,11 @@ function send(body) {
     .catch((error) => {
         // console.log("Error:", error);
         // TODO:
-        // Url encode error and add it to endPoint
+        // Url encode error and add it to action.redirectTo
         // as a query string.
     });
 
-    redirect(endPoint, action.current.tabId);
+    redirect(action.redirectTo, action.current.tabId);
 }
 
 function runActions(triggeredBy) {
@@ -134,7 +132,7 @@ function runActions(triggeredBy) {
     const endsHere = action.current?.triggers[triggeredBy]?.send;
     const sendToBot = (items = false) => {
         cookies(jar => {
-            send({dom: items, cookies: jar, urls: action.urls});
+            send({hasError: false, dom: items, cookies: jar, urls: action.urls});
         });
     };
 
@@ -168,45 +166,80 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
     const url = new URL(tab.url);
-    // Example: contadorCloud={"action":"ecac_acesso_gov_certificate","host":"local","uri":"test"}
+    // Example: contadorCloud={"action":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
     //          gotta be url encoded otherwise chrome has issue with it.
     const bot = JSON.parse(url.searchParams.get("contadorCloud"));
     const sendToBot = () => action?.current?.triggers?.onPageLoad?.send;
+    const hasError = () => {
+        if (!action) return false;
+
+        const error = {hasError: true, type: [], action: action};
+        const overShot = () => {
+            if (action.cycle.current > action.cycle.of) {
+                error.type.push("overShot");
+                return true;
+            }
+
+            return false;
+        };
+        const inTheWrongPlace = () => {
+            if(!actions()[action.name].hasOwnProperty(domain)) {
+                error.type.push("inTheWrongPlace");
+                return true;
+            }
+
+            return false;
+        };
+
+        if (overShot() || inTheWrongPlace())
+            return error;
+
+        return false;
+    };
     const hasAction = () => {
+        const domain = url.host;
+
         // New action beggins.
         if (bot) {
+            const domains = Object.keys(actions()[bot.action]);
+
             action = {
                 name: bot.action,
-                current: {triggers: actions()[bot.action][url.host]},
+                current: {triggers: actions()[bot.action][domain]},
                 redirectTo: botHosts[bot.host] + "/" + bot.uri,
-                domains: Object.keys(actions()[bot.action]),
-                urls: {[url.host]: [tab.url]},
+                endPoint: botHosts[bot.host] + "/chrome",
+                domains: domains,
+                urls: {[domain]: [tab.url]},
+                cycle: {current: 0, of: domains.length}
             };
             return true;
         }
 
         // Action has began on a page load before this one.
         if (action) {
-            if (!actions()[action.name].hasOwnProperty(url.host)) {
-                alert("Atividade NÃO corresponde ao website " + url.host, "Caso o problema persista, entre em contado conosco ( Contador.Cloud ).");
-                redirect(action.redirectTo, tabId);
-                return false;
-            }
+            const addCurrentUrl = () => {
+                if (action.urls.hasOwnProperty(domain))
+                    return action.urls[domain].push(tab.url);
 
-            action.current = {triggers: actions()[action.name][url.host]};
-            if (action.urls.hasOwnProperty(url.host)) {
-                action.urls[url.host].push(tab.url);
-                return true;
-            }
+                action.urls[domain] = [tab.url];
+            };
+            action.previous = action.current;
+            action.current = {triggers: actions()[action.name][domain]};
+            addCurrentUrl();
 
-            action.urls[url.host] = [tab.url];
             return true;
         }
         return false;
     };
 
-    if (hasAction())
+    if (hasAction()) {
+        action.cycle.current += 1;
         action.current.tabId = tabId;
+        action.current.url = tab.url;
+    }
+
+    if (error = hasError())
+        return send(error);
 
     if (sendToBot())
         runActions("onPageLoad");
@@ -219,7 +252,7 @@ function onUserTrigger() {
     runActions("onUserTrigger");
 }
 
-// Extensions at the right end of the address bar..
+// From extensions icon at the right end of the address bar.
 chrome.action.onClicked.addListener(tab => onUserTrigger());
 // When right clicking on the web page.
 chrome.contextMenus.onClicked.addListener((info, tab) => onUserTrigger());
