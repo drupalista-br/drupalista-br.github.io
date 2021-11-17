@@ -9,9 +9,16 @@ const contextMenu = () => {
         ]
     });
 };
+const reset = () => {
+    body = {hasError: false};
+    action = null;
+};
+let body;
+let action;
 let actionsList = null;
-let action = null;
+
 checkVersion();
+reset();
 
 function checkVersion() {
     // TODO:
@@ -35,17 +42,36 @@ function actions() {
                     methods: {
                         alert: ["Proximo Passo", "Clique no botão \"Entrar com gov.br\"."]
                     }
-                }
-            },
-            "sso.acesso.gov.br": {
+                },
                 onPageLoad: {
-                    /*methods: {
+                    methods: {
                         dom: [
                             // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
                             () => {return document.title;}
                         ],
-                    },*/
+                    }
+                }
+            },
+            "sso.acesso.gov.br": {
+                onPageLoad: {
+                    methods: {
+                        dom: [
+                            // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
+                            () => {return document.title;}
+                        ],
+                    },
                     send: true
+                }
+            }
+        },
+        ecac_alternar_procurador: {
+            "cav.receita.fazenda.gov.br": {
+                onPageLoad: {
+                    methods: {
+                        dom: [
+                            () => {return document.title;}
+                        ]
+                    }
                 }
             }
         }
@@ -62,21 +88,19 @@ function alert(title, message, interation = true) {
     });
 }
 
-function dom(queries, done) {
+function dom(queries) {
     const tabId = action.current.tabId;
-    const results = {};
-    queries.forEach((query, index, queries) => {
+    const results = {name: "dom", values: []};
+    queries.forEach((query, index) => {
         chrome.scripting.executeScript({target: {tabId: tabId}, func: query}, result => {
-            results[index] = result;
-            isLastQuery = index === queries.length - 1;
-            if (isLastQuery)
-                done(results);
+            results.values.push(result);
         });
     });
+    return results;
 }
 
-function cookies(done) {
-    const jar = {};
+function getCookies() {
+    const jar = {name: "cookies", values: {}};
     const domains = action.domains;
     const eat = (domain, cookies) => {
         let url;
@@ -86,16 +110,17 @@ function cookies(done) {
         });
     };
 
-    domains.forEach((domain, index, domains) => {
+    domains.forEach(domain => {
         chrome.cookies.getAll({ domain: domain }, cookies => {
-            jar[domain] = cookies;
-            isLastDomain = index === domains.length - 1;
+            jar.values[domain] = cookies;
             eat(domain, cookies); // 🍪👹
-
-            if (isLastDomain)
-                done(jar);
         });
     });
+    return jar;
+}
+
+async function setCookies(cookies) {
+    await cookies.forEach(cookie => chrome.cookies.set(cookie));
 }
 
 /**
@@ -104,7 +129,7 @@ function cookies(done) {
  * either to its local or remote enviroment.
  */
 function redirect(to, tabId) {
-    action = null;
+    reset();
     chrome.tabs.update(tabId, {"url": to});
 }
 
@@ -127,36 +152,46 @@ function send(body) {
 }
 
 function runAction(triggeredBy) {
-    const hasDom = action.current?.triggers[triggeredBy]?.methods?.dom;
     const hasAlert = action.current?.triggers[triggeredBy]?.methods?.alert;
-    const endsHere = action.current?.triggers[triggeredBy]?.send;
-    const sendToBot = (items = false) => {
-        cookies(jar => {
-            send({hasError: false, dom: items, cookies: jar, urls: action.urls});
-        });
+    const Send = action.current?.triggers[triggeredBy]?.send;
+    const hasDom = () => {
+        if (queries = action.current?.triggers[triggeredBy]?.methods?.dom)
+            return dom(queries);
+
+        return false;
     };
+    const promises = [];
 
-    /**
-     * Alert is gonna be placed only when the action
-     * ends elsewhere so the alert is an instruction
-     * on how to proceed in case the user triggers it
-     * before they should,
-     *
-     * Nontheless I placed the endsHere for cases which the
-     * current page is actually where the action really ends
-     * and there is something we should tell the
-     * user before moving on.
-     */
-    if (message = hasAlert) {
-        alert(...message);
+    if (msg = hasAlert) alert(...msg);
 
-        if (!endsHere) return;
+    if (Dom = hasDom())
+        promises.push(Dom);
+
+    if (Send)
+        promises.push(getCookies());
+
+    if (promises.length) {
+        Promise.all(promises)
+        .then(results => {
+            results.forEach(result => {
+                if (!body.hasOwnProperty(result.name))
+                    return body[result.name] = result.values;
+
+                if (Array.isArray(result.values))
+                    return body[result.name].push(result.values);
+
+                body[result.name] = result.values;
+            });
+
+            if (Send) {
+                body.urls = action.urls;
+                send(body);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
-
-    if (queries = hasDom)
-        return dom(queries, items => sendToBot(items));
-
-    sendToBot();
 }
 
 /**
@@ -166,85 +201,86 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
     const url = new URL(tab.url);
-    // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
-    //          gotta be url encoded otherwise chrome has issue with it.
-    const queryString = JSON.parse(url.searchParams.get("botAction"));
-    const sendToBot = () => action?.current?.triggers?.onPageLoad?.send;
-    const hasError = () => {
-        if (!action) return false;
-
-        const error = {hasError: true, type: [], action: action};
-        const overShot = () => {
-            if (action.cycle.current > action.cycle.of) {
-                error.type.push("overShot");
-                return true;
-            }
-
-            return false;
-        };
-        const inTheWrongPlace = () => {
-            if(!actions()[action.name].hasOwnProperty(domain)) {
-                error.type.push("inTheWrongPlace");
-                return true;
-            }
-
-            return false;
-        };
-
-        if (overShot() || inTheWrongPlace())
-            return error;
-
-        return false;
-    };
-    const hasAction = () => {
+    const cookies = JSON.parse(url.searchParams.get("botCookies"));
+    const onPageLoad = () => {
+        // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
+        //          gotta be url encoded otherwise chrome has issue with it.
         const domain = url.host;
-        const starting = () => {
-            if (!queryString) return false;
+        const botAction = JSON.parse(url.searchParams.get("botAction"));
+        const hasAction = () => {
+            const starting = () => {
+                if (!botAction) return false;
 
-            const domains = Object.keys(actions()[queryString.name]);
-
-            action = {
-                name: queryString.name,
-                current: {triggers: actions()[queryString.name][domain]},
-                redirectTo: botHosts[queryString.host] + "/" + queryString.uri,
-                endPoint: botHosts[queryString.host] + "/browser",
-                domains: domains,
-                urls: {[domain]: [tab.url]},
-                cycle: {current: 0, of: domains.length}
+                const domains = Object.keys(actions()[botAction.name]);
+                action = {
+                    name: botAction.name,
+                    current: {triggers: actions()[botAction.name][domain]},
+                    redirectTo: botHosts[botAction.host] + "/" + botAction.uri,
+                    endPoint: botHosts[botAction.host] + "/browser",
+                    domains: domains,
+                    urls: {[domain]: [tab.url]},
+                    cycle: {current: 0, of: domains.length},
+                    body: {}
+                };
+                return true;
             };
-            return true;
-        };
-        const inCourse = () => {
-            if (!action) return false;
+            const inCourse = () => {
+                if (!action) return false;
 
-            const addCurrentUrl = () => {
-                if (action.urls.hasOwnProperty(domain))
-                    return action.urls[domain].push(tab.url);
+                const addCurrentUrl = () => {
+                    if (action.urls.hasOwnProperty(domain))
+                        return action.urls[domain].push(tab.url);
 
-                action.urls[domain] = [tab.url];
+                    action.urls[domain] = [tab.url];
+                };
+                action.previous = action.current;
+                action.current = {triggers: actions()[action.name][domain]};
+                addCurrentUrl();
+
+                return true;
             };
-            action.previous = action.current;
-            action.current = {triggers: actions()[action.name][domain]};
-            addCurrentUrl();
+            if (starting() || inCourse()) return true;
 
-            return true;
+            return false;
         };
-        if (starting() || inCourse()) return true;
+        const hasError = () => {
+            const error = {hasError: true, type: [], action: action};
+            const overShot = () => {
+                if (action.cycle.current > action.cycle.of)
+                    return error.type.push("overShot");
 
-        return false;
+                return false;
+            };
+            const inTheWrongPlace = () => {
+                if(!actions()[action.name].hasOwnProperty(domain))
+                    return error.type.push("inTheWrongPlace");
+
+                return false;
+            };
+
+            if (overShot() || inTheWrongPlace())
+                return error;
+
+            return false;
+        };
+
+        if (hasAction()) {
+            action.cycle.current += 1;
+            action.current.tabId = tabId;
+            action.current.url = tab.url;
+            action.current.domain = domain;
+
+            if (error = hasError())
+                return send(error);
+
+            runAction("onPageLoad");
+        }
     };
 
-    if (hasAction()) {
-        action.cycle.current += 1;
-        action.current.tabId = tabId;
-        action.current.url = tab.url;
-    }
+    if (cookies)
+        return setCookies(cookies).then(() => onPageLoad());
 
-    if (error = hasError())
-        return send(error);
-
-    if (sendToBot())
-        runAction("onPageLoad");
+    onPageLoad();
 });
 
 function onUserTrigger() {
