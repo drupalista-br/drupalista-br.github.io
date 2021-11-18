@@ -95,7 +95,7 @@ function dom(query) {
     });
 }
 
-function eatCookies(domain, cookies) {
+function eat(domain, cookies) {
     let url;
     cookies.forEach((cookie) => {
         url = "https://" + domain + cookie.path;
@@ -109,7 +109,7 @@ function getCookies() {
 
     domains.forEach(domain => {
         jar.push(chrome.cookies.getAll({ domain: domain }).then(cookies => {
-            eatCookies(domain, cookies);
+            eat(domain, cookies);
             return {method: "getCookies", return: {domain: domain, cookies: cookies}};
         }));
     });
@@ -118,7 +118,7 @@ function getCookies() {
 
 function setCookies(jar) {
     Object.keys(jar).forEach((cookies, domain) => {
-        eatCookies(domain, cookies);
+        eat(domain, cookies);
         cookies.forEach(cookie => chrome.cookies.set(cookie));
     });
 }
