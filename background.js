@@ -116,8 +116,24 @@ function getCookies() {
     return jar;
 }
 
+/**
+ * Example:
+    const jar = {
+        "cav.receita.fazenda.gov.br": [
+            {
+                //domain: "cav.receita.fazenda.gov.br",
+                name: "teste",
+                value: "teste value",
+                path: "/",
+                url: "https://cav.receita.fazenda.gov.br"
+            }
+        ]
+    }
+*/
 function setCookies(jar) {
-    Object.keys(jar).forEach((cookies, domain) => {
+    let cookies;
+    Object.keys(jar).forEach(domain => {
+        cookies = jar[domain];
         eat(domain, cookies);
         cookies.forEach(cookie => chrome.cookies.set(cookie));
     });
@@ -180,7 +196,7 @@ function runAction(triggeredBy) {
                 send(body);
         })
         .catch(error => {
-            // TODO: Send error to endpoint.
+            // TODO: Send error to the endpoint.
             console.log(error);
         });
     }
@@ -192,32 +208,81 @@ function runAction(triggeredBy) {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
-    /*action = {current: {tabId: tabId}};
-    const query = () => {
-        const url = new URL(window.location.href);
-        const botAction = url.searchParams.get("botAction");
-        //if (botAction) {
-            document.getElementById("NI").value = "00111222000133";
-            //document.getElementById("frmLogin").submit();
-        //}
-        return {name: 'nameTest', value: 'valueTest'};
+    const testBed = () => {
+        chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
+        let actions = [
+            {
+                name: "form",
+                method: "fillUp",
+                args: [[{
+                    //tag: "input",     // input is default.
+                    //tagId: "id",      // attribute "id" is default.
+                    //valueId: "value", // attribute "value" is default.
+                    id: "NI",
+                    value: "6598458"
+                }]],
+            },
+            {
+                name: "form",
+                method: "submit",
+                args: [{
+                    //tagId: "id", // form attribute "id" is default.
+                    id: "frmLogin"
+                }],
+            },
+        ];
+        const jar = {
+            "cav.receita.fazenda.gov.br": [
+                {
+                    name: "bot-where",
+                    value: "https://cav.receita.fazenda.gov.br/autenticacao/login",
+                    path: "/",
+                    url: "https://cav.receita.fazenda.gov.br"
+                },
+                {
+                    name: "bot-actions",
+                    value: JSON.stringify(actions),
+                    path: "/",
+                    url: "https://cav.receita.fazenda.gov.br/autenticacao/login"
+                }
+            ]
+        }
+        setCookies(jar);
+
+        /*action = {current: {tabId: tabId}};
+        const query = () => {
+            //const url = new URL(window.location.href);
+            //const botAction = url.searchParams.get("botAction");
+            //if (botAction) {
+                //document.getElementById("NI").value = formValues.ni;
+                //document.getElementById("frmLogin").submit();
+            //}
+            //return {name: 'nameTest', value: 'valueTest'};
+
+        };
+        Promise.all([dom(query)])
+        .then(result => {
+            //console.log(result);
+            //console.log(JSON.stringify(result));
+        });*/
     };
-    Promise.all([dom(query)])
-    .then(result => {
-        console.log(result);
-        console.log(JSON.stringify(result));
-    });
-    return;*/
 
     const url = new URL(tab.url);
+    const isBotHost = () => {
+        const index = Object.values(botHosts).indexOf('https://' + url.host);
+        if (index === -1) return;
+
+        return Object.keys(botHosts)[index]; // remote or local
+    };
+    const isTestBed = url.searchParams.has("testBed");
     const cookies = JSON.parse(url.searchParams.get("botCookies"));
     const onPageLoad = () => {
         // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
         //          gotta be url encoded otherwise chrome has issue with it.
-        const domain = url.host;
+        const domain = url.hostname;
         const botAction = JSON.parse(url.searchParams.get("botAction"));
         const hasAction = () => {
-            const onPageLoading = () => {
+            const onPageLoad = () => {
                 if (!botAction) return false;
 
                 const domains = Object.keys(actions()[botAction.name]);
@@ -248,7 +313,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
                 return true;
             };
-            if (onPageLoading() || inCourse()) return true;
+            if (onPageLoad() || inCourse()) return true;
 
             return false;
         };
@@ -274,6 +339,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         };
 
         if (hasAction()) {
+            chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
             action.cycle.current += 1;
             action.current.tabId = tabId;
             action.current.url = tab.url;
@@ -285,6 +351,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             runAction("onPageLoad");
         }
     };
+
+    if (isTestBed) {
+        testBed();
+        return reset();
+    }
+
+    if (isBotHost()) return;
 
     if (cookies)
         return setCookies(cookies).then(() => onPageLoad());
