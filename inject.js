@@ -1,6 +1,6 @@
 const cookies = {
     eat: name => document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
-    getValue: (name, eat = true) => {
+    get: (name, eat = true) => {
         let result;
         document.cookie.split(";").forEach(cookie => {
             cookie = cookie.split("=");
@@ -33,10 +33,10 @@ const classes = {
 }
 
 const actions = () => {
-    const where = cookies.getValue("bot-where", false);
+    const where = cookies.get("bot-where", false);
     if (window.location.href.includes(where)) {
         cookies.eat("bot-where");
-        return JSON.parse(cookies.getValue("bot-actions"));
+        return JSON.parse(cookies.get("bot-actions"));
     }
 }
 
