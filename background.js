@@ -1,8 +1,9 @@
 const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
 const contextMenu = () => {
+    // TODO: use update and remove.
     chrome.contextMenus.create({
-        "id": "contadorCloudCookies",
-        "title": "Contador.Cloud Cookies",
+        "id": id,
+        "title": title,
         "documentUrlPatterns": [
             "http://*/*",
             "https://*/*"
@@ -131,7 +132,7 @@ function getCookies() {
 */
 function setCookies(cookies) {
     const promises = [];
-    cookies.forEach(cookie => promises.push(chrome.cookies.set(cookie).then(() => {})));
+    cookies.forEach(cookie => promises.push(chrome.cookies.set(cookie).then(result => result)));
     return promises;
 }
 
@@ -151,8 +152,8 @@ function send(body) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(body),
     })
-    //.then(response => response.json())
-    //.then(data => {})
+    .then(response => response.json())
+    .then(data => {})
     .catch((error) => {
         // console.log("Error:", error);
         // TODO:
@@ -211,9 +212,69 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
         return Object.keys(botHosts)[index]; // remote or local
     };
-    // The botInject query paramenter holds a JSON array with two cookies.
-    // See examples at the end of this file.
-    const inject = JSON.parse(url.searchParams.get("botInject"));
+    const inject = () => {
+        const botHasInject = {
+            name: "botHasInject",
+            domain: "api.contador.cloud",
+            path: "/",
+            url: "https://api.contador.cloud",
+        };
+        const starting = inject => {
+            const cookies = [
+                Object.assign(inject.cookie, {
+                    name: "botInject",
+                    value: JSON.stringify(inject.cookieValue),
+                    path: "/",
+                }),
+                Object.assign(botHasInject, {value: inject.cookie.url})
+            ];
+
+            return Promise.all(setCookies(cookies)).then(result => result);
+        };
+        const inCourse = url => {
+            return Promise.all([
+                chrome.cookies.get({name: "botInject", url: url})
+                .then(cookie => {
+                    const cookieValue = JSON.parse(cookie.value);
+                    const hasAction = () => {
+                        for (const where in cookieValue) {
+                            if (tab.url.includes(where))
+                                return cookieValue[where];
+                        }
+                    };
+                    const endsHere = action => {
+                        const endsHere = action?.endsHere ?? true;
+                        const cookies = [Object.assign(botHasInject, {value: ""})]
+                        if (endsHere)
+                            Promise.all(setCookies(cookies)).then(result => result);
+                    };
+                    if (action = hasAction()) {
+                        endsHere(action);
+                        return true;
+                    }
+                })
+            ]).then(result => result);
+        };
+
+        return Promise.all([
+            chrome.cookies.get({name: "botHasInject", url: "https://api.contador.cloud"})
+            .then(cookie => {
+                const hasAction = () => {
+                    const botInjectUrl = cookie?.value;
+                    // See example at the end of this file.
+                    const inject = JSON.parse(url.searchParams.get("botInject"));
+                    if (inject)
+                        return starting(inject);
+
+                    if (botInjectUrl)
+                        return inCourse(botInjectUrl);
+                };
+
+                if (hasAction())
+                    return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
+            })
+        ]);
+    };
     const onPageLoad = () => {
         // Example: botAction={"name":"ecac_acesso_gov_certificate","host":"local","uri":"uriValue"}
         //          gotta be url encoded otherwise chrome has issue with it.
@@ -221,7 +282,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         const botAction = JSON.parse(url.searchParams.get("botAction"));
         const hasAction = () => {
             const onPageLoad = () => {
-                if (!botAction) return false;
+                if (!botAction) return;
 
                 const domains = Object.keys(actions()[botAction.name]);
                 action = {
@@ -237,7 +298,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 return true;
             };
             const inCourse = () => {
-                if (!action) return false;
+                if (!action) return;
 
                 const addCurrentUrl = () => {
                     if (action.urls.hasOwnProperty(domain))
@@ -252,28 +313,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 return true;
             };
             if (onPageLoad() || inCourse()) return true;
-
-            return false;
         };
         const hasError = () => {
             const error = {hasError: true, type: [], action: action};
             const overShot = () => {
                 if (action.cycle.current > action.cycle.of)
                     return error.type.push("overShot");
-
-                return false;
             };
             const inTheWrongPlace = () => {
                 if(!actions()[action.name].hasOwnProperty(domain))
                     return error.type.push("inTheWrongPlace");
-
-                return false;
             };
 
             if (overShot() || inTheWrongPlace())
                 return error;
-
-            return false;
         };
 
         if (hasAction()) {
@@ -291,24 +344,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
     if (isBotHost()) return;
 
-    if (cookies = inject) {
-        return Promise.all(setCookies(cookies))
-        .then(() => {
-            chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
-            onPageLoad();
-        })
-        .catch(error => {
-            // TODO: Send error to the endpoint.
-            console.log(error);
-        });
-    }
-
-    onPageLoad();
+    inject().then(isInject => isInject[0] ?? onPageLoad());
 });
 
 function onUserTrigger() {
     if (!action)
-        return alert("Contado.Cloud", "Nada a ser feito.");
+        return alert("Contador.Cloud", "Nada a ser feito.");
 
     runAction("onUserTrigger");
 }
@@ -318,51 +359,39 @@ chrome.action.onClicked.addListener(tab => onUserTrigger());
 // When right clicking on the web page.
 chrome.contextMenus.onClicked.addListener((info, tab) => onUserTrigger());
 
-chrome.runtime.onStartup.addListener(contextMenu);
-chrome.runtime.onInstalled.addListener(contextMenu);
-
 /**
  * Examples:
  *
- * Actions to be executed at inject.js.
-    let actions = [
-        {
-            name: "form",
-            method: "fillUp",
-            args: [[{
-                //tag: "input",     // input is default.
-                //tagId: "id",      // attribute "id" is default.
-                //valueId: "value", // attribute "value" is default.
-                id: "NI",
-                value: "6598458"
-            }]],
-        },
-        {
-            name: "form",
-            method: "submit",
-            args: [{
-                //tagId: "id", // form attribute "id" is default.
-                id: "frmLogin"
-            }],
-        },
-    ];
-
  * botInject query paramter:
-    const inject = [
-        {
-            domain: "cav.receita.fazenda.gov.br",
-            name: "bot-where",
-            // Spot where actions is gonna be triggered at inject.js.
-            value: "https://cav.receita.fazenda.gov.br/autenticacao/login",
-            path: "/",
-            url: "https://cav.receita.fazenda.gov.br"
+ *
+let botInject = {
+    cookie: {
+        domain: "receita.fazenda.gov.br",
+        url: "https://receita.fazenda.gov.br"
+    },
+    cookieValue: {
+        "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp?cpf": {
+            endsHere: false,
+            actions: [{
+                name: "observe",
+                method: "node",
+                args: [{
+                    name: "form",
+                    method: "submit",
+                    args: [{id: "theForm"}],
+                    datasetHolder: "hcaptchaResponse",
+                    options: {attributeOldValue: true},
+                }]
+            }]
         },
-        {
-            domain: "cav.receita.fazenda.gov.br",
-            name: "bot-actions",
-            value: JSON.stringify(actions),
-            path: "/",
-            url: "https://cav.receita.fazenda.gov.br/autenticacao/login"
+        "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublicaExibir.asp": {
+            domain: "receita.fazenda.gov.br", // needed for cookie eating.
+            actions: [{
+                name: "node",
+                method: "get",
+                args: ["selector test"],
+            }]
         }
-    ];
+    }
+};
 */

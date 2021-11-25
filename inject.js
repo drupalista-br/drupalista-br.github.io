@@ -1,20 +1,20 @@
-const cookies = {
-    eat: name => document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
-    get: (name, eat = true) => {
-        let result;
+const botcookies = {
+    eat: (name, domain) => document.cookie = name + "=; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
+    get: name => {
+        let value;
         document.cookie.split(";").forEach(cookie => {
+            if (value) return;
+
             cookie = cookie.split("=");
-            if (cookie[0].trim() === name) {
-                result = cookie[1];
-                if (eat)
-                    cookies.eat(name);
-            }
+            if (cookie[0].trim() === name)
+                value = cookie[1];
         });
-        return result;
+
+        return value;
     }
 };
 
-const classes = {
+const actions = {
     form: {
         fillUp: fields => {
             const tag = field => field.tag ?? "input";
@@ -29,16 +29,40 @@ const classes = {
             const tagId = form => form.tagId ?? "id";
             document.querySelector(`form[${tagId(form)} = "${form.id}"]`).submit();
         }
+    },
+    observe: {
+        node: action => {
+            // See https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
+            (new MutationObserver(mutations => {
+                for(const mutation of mutations) {
+                    dataset = mutation.target.dataset[action.datasetHolder];
+                    if (dataset)
+                        actions[action.name][action.method](...action.args);
+                }
+            }))
+            .observe(document.querySelector('iframe[data-hcaptcha-response = ""]'), action.options);
+        }
+    },
+    node: {
+        get: selector => console.log(selector)
     }
 }
 
-const actions = () => {
-    const where = cookies.get("bot-where", false);
-    if (window.location.href.includes(where)) {
-        cookies.eat("bot-where");
-        return JSON.parse(cookies.get("bot-actions"));
+//document.querySelector(selector)
+const getActions = () => {
+    const inject = JSON.parse(botcookies.get("botInject"));
+    const eat = cookie => cookie?.endsHere ?? true;
+    let cookie;
+
+    for (const where in inject) {
+        cookie = inject[where];
+        if (eat(cookie))
+            botcookies.eat("botInject", "." + cookie.domain);
+
+        if (window.location.href.includes(where))
+            return cookie.actions;
     }
 }
 
-if (Actions = actions())
-    Actions.forEach(action => classes[action.name][action.method](...action.args))
+if (Actions = getActions())
+    Actions.forEach(action => actions[action.name][action.method](...action.args));
