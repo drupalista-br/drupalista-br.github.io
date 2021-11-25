@@ -219,17 +219,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             path: "/",
             url: "https://api.contador.cloud",
         };
-        const starting = inject => {
+        const starting = queryParam => {
             const cookies = [
-                Object.assign(inject.cookie, {
+                Object.assign(queryParam.cookie, {
                     name: "botInject",
-                    value: JSON.stringify(inject.cookieValue),
+                    value: JSON.stringify(queryParam.cookieValue),
                     path: "/",
                 }),
-                Object.assign(botHasInject, {value: inject.cookie.url})
+                Object.assign(botHasInject, {value: queryParam.cookie.url})
             ];
 
-            return Promise.all(setCookies(cookies)).then(result => result);
+            return Promise.all(setCookies(cookies)).then(results => results);
         };
         const inCourse = url => {
             return Promise.all([
@@ -244,9 +244,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                     };
                     const endsHere = action => {
                         const endsHere = action?.endsHere ?? true;
-                        const cookies = [Object.assign(botHasInject, {value: ""})]
-                        if (endsHere)
-                            Promise.all(setCookies(cookies)).then(result => result);
+                        if (endsHere) {
+                            Promise.all(setCookies([Object.assign(botHasInject, {value: ""})]))
+                            .then(result => result);
+                        }
                     };
                     if (action = hasAction()) {
                         endsHere(action);
@@ -259,18 +260,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         return Promise.all([
             chrome.cookies.get({name: "botHasInject", url: "https://api.contador.cloud"})
             .then(cookie => {
-                const hasAction = () => {
-                    const botInjectUrl = cookie?.value;
-                    // See example at the end of this file.
-                    const inject = JSON.parse(url.searchParams.get("botInject"));
-                    if (inject)
-                        return starting(inject);
+                // See example at the end of this file.
+                const queryParam = JSON.parse(url.searchParams.get("botInject"));
+                const hasInject = () => {
+                    if (queryParam)
+                        return starting(queryParam);
 
-                    if (botInjectUrl)
-                        return inCourse(botInjectUrl);
+                    if (value = cookie?.value)
+                        return inCourse(value);
                 };
 
-                if (hasAction())
+                if (hasInject())
                     return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
             })
         ]);
@@ -347,23 +347,16 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     inject().then(isInject => isInject[0] ?? onPageLoad());
 });
 
-function onUserTrigger() {
-    if (!action)
-        return alert("Contador.Cloud", "Nada a ser feito.");
-
-    runAction("onUserTrigger");
-}
-
 // From extensions icon at the right end of the address bar.
-chrome.action.onClicked.addListener(tab => onUserTrigger());
+chrome.action.onClicked.addListener(tab => runAction("onUserTrigger"));
 // When right clicking on the web page.
-chrome.contextMenus.onClicked.addListener((info, tab) => onUserTrigger());
+chrome.contextMenus.onClicked.addListener((info, tab) => runAction("onUserTrigger"));
 
 /**
  * Examples:
  *
  * botInject query paramter:
- *
+ * /
 let botInject = {
     cookie: {
         domain: "receita.fazenda.gov.br",
@@ -375,13 +368,18 @@ let botInject = {
             actions: [{
                 name: "observe",
                 method: "node",
-                args: [{
-                    name: "form",
-                    method: "submit",
-                    args: [{id: "theForm"}],
-                    datasetHolder: "hcaptchaResponse",
-                    options: {attributeOldValue: true},
-                }]
+                args: [
+                    {
+                        datasetHolder: "hcaptchaResponse",
+                        selector: 'iframe[data-hcaptcha-response || ""]', // = sign gotta be replace by ||
+                        options: {attributeOldValue: true}
+                    },
+                    {
+                        name: "form",
+                        method: "submit",
+                        args: [{id: "theForm"}],
+                    }
+                ]
             }]
         },
         "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublicaExibir.asp": {
@@ -389,7 +387,7 @@ let botInject = {
             actions: [{
                 name: "node",
                 method: "get",
-                args: ["selector test"],
+                args: ["html"]
             }]
         }
     }

@@ -6,6 +6,16 @@ const botcookies = {
             if (value) return;
 
             cookie = cookie.split("=");
+            const equalSign = () => {
+                const moreThanOne = (cookie.length - 1) > 1;
+
+                if (moreThanOne)
+                    throw "The botInject query parameter has one or more equal signs ( = ) in it. Replace them with double pipes ( || )";
+
+                cookie[1] = cookie[1].replace(/\|\|/g, "=");
+            };
+            equalSign();
+
             if (cookie[0].trim() === name)
                 value = cookie[1];
         });
@@ -31,32 +41,42 @@ const actions = {
         }
     },
     observe: {
-        node: action => {
+        node: (element, action) => {
             // See https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
             (new MutationObserver(mutations => {
                 for(const mutation of mutations) {
-                    dataset = mutation.target.dataset[action.datasetHolder];
+                    dataset = mutation.target.dataset[element.datasetHolder];
                     if (dataset)
                         actions[action.name][action.method](...action.args);
                 }
             }))
-            .observe(document.querySelector('iframe[data-hcaptcha-response = ""]'), action.options);
+            .observe(document.querySelector(element.selector), element.options);
         }
     },
     node: {
-        get: selector => console.log(selector)
+        get: (selector, action = null) => {
+            const node = document.querySelector(selector);
+            if (action)
+                return actions[action.name][action.method](...action.args);
+
+            actions.fetch.send(node);
+        }
+    },
+    fetch: {
+        send: body => {
+
+        }
     }
 }
 
-//document.querySelector(selector)
 const getActions = () => {
     const inject = JSON.parse(botcookies.get("botInject"));
-    const eat = cookie => cookie?.endsHere ?? true;
+    const endsHere = cookie => cookie?.endsHere ?? true;
     let cookie;
 
     for (const where in inject) {
         cookie = inject[where];
-        if (eat(cookie))
+        if (endsHere(cookie))
             botcookies.eat("botInject", "." + cookie.domain);
 
         if (window.location.href.includes(where))
@@ -64,5 +84,11 @@ const getActions = () => {
     }
 }
 
-if (Actions = getActions())
-    Actions.forEach(action => actions[action.name][action.method](...action.args));
+try {
+    if (Actions = getActions())
+        Actions.forEach(action => actions[action.name][action.method](...action.args));
+}
+catch(err) {
+    // TODO: Send error to endPoint.
+    console.log(err);
+}
