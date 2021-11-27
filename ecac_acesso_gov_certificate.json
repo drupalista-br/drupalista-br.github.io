@@ -1,6 +1,6 @@
 [
     {
-        "url": "chrome://newtab/?cookiesEatReload",
+        "url": "chrome://newtab/",
         "action": {
             "name": "cookiesEatReload",
             "args": [
