@@ -64,7 +64,7 @@ const actions = {
     },
     fetch: {
         send: body => {
-
+            console.log(body);
         }
     }
 }
@@ -92,3 +92,7 @@ catch(err) {
     // TODO: Send error to endPoint.
     console.log(err);
 }
+
+/*if (Actions = getActions())
+    Actions.forEach(action => actions[action.name][action.method](...action.args));
+*/
