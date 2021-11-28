@@ -1,3 +1,5 @@
+let botJobs;
+let token;
 const botcookies = {
     eat: (name, domain) => document.cookie = name + "=; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
     get: name => {
@@ -6,16 +8,6 @@ const botcookies = {
             if (value) return;
 
             cookie = cookie.split("=");
-            const equalSign = () => {
-                const moreThanOne = (cookie.length - 1) > 1;
-
-                if (moreThanOne)
-                    throw "The botInject query parameter has one or more equal signs ( = ) in it. Replace them with double pipes ( || )";
-
-                cookie[1] = cookie[1].replace(/\|\|/g, "=");
-            };
-            equalSign();
-
             if (cookie[0].trim() === name)
                 value = cookie[1];
         });
@@ -23,76 +15,59 @@ const botcookies = {
         return value;
     }
 };
-
 const actions = {
-    form: {
-        fillUp: fields => {
-            const tag = field => field.tag ?? "input";
-            const tagId = field => field.tagId ?? "id";
-            const valueId = field => field.valueId ?? "value";
-            fields.forEach(field => {
-                document.querySelector(`${tag(field)}[${tagId(field)} = "${field.id}"]`)
-                .setAttribute(valueId(field), field.value);
-            });
-        },
-        submit: form => {
-            const tagId = form => form.tagId ?? "id";
-            document.querySelector(`form[${tagId(form)} = "${form.id}"]`).submit();
-        }
+    send: body => {
+        console.log(body);
     },
-    observe: {
-        node: (element, action) => {
-            // See https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
-            (new MutationObserver(mutations => {
-                for(const mutation of mutations) {
-                    dataset = mutation.target.dataset[element.datasetHolder];
-                    if (dataset)
-                        actions[action.name][action.method](...action.args);
+    getJobs: async name => {
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/inject/" + name + ".json";
+        const response = await fetch(url);
+        return response.json();
+    },
+    formFillUp: fields => {
+        const tag = field => field.tag ?? "input";
+        const tagId = field => field.tagId ?? "id";
+        const valueId = field => field.valueId ?? "value";
+        fields.forEach(field => {
+            document.querySelector(`${tag(field)}[${tagId(field)} = "${field.id}"]`)
+            .setAttribute(valueId(field), field.value);
+        });
+    },
+    formSubmit: form => {
+        const tagId = form => form.tagId ?? "id";
+        document.querySelector(`form[${tagId(form)} = "${form.id}"]`).submit();
+    },
+    nodeObserve: (element, action) => {
+        // See https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
+        (new MutationObserver(mutations => {
+            for(const mutation of mutations) {
+                dataset = mutation.target.dataset[element.datasetHolder];
+                if (dataset) {
+                    action.args.push(dataset);
+                    actions[action.name](...action.args);
                 }
-            }))
-            .observe(document.querySelector(element.selector), element.options);
-        }
+            }
+        }))
+        .observe(document.querySelector(element.selector), element.options);
     },
-    node: {
-        get: (selector, action = null) => {
-            const node = document.querySelector(selector);
-            if (action)
-                return actions[action.name][action.method](...action.args);
-
-            actions.fetch.send(node);
+    nodeGet: (selector, action = null) => {
+        const node = document.querySelector(selector);
+        if (action) {
+            action.args.push(node);
+            return actions[action.name](...action.args);
         }
-    },
-    fetch: {
-        send: body => {
-            console.log(body);
-        }
+        return node;
     }
+};
+const botInject = () => {
+    const botInject = botcookies.get("botInject").split("|");
+    botJobs = botInject[0];
+    token = botInject[1];
 }
-
-const getActions = () => {
-    const inject = JSON.parse(botcookies.get("botInject"));
-    const endsHere = cookie => cookie?.endsHere ?? true;
-    let cookie;
-
-    for (const where in inject) {
-        cookie = inject[where];
-        if (endsHere(cookie))
-            botcookies.eat("botInject", "." + cookie.domain);
-
-        if (window.location.href.includes(where))
-            return cookie.actions;
-    }
-}
-
-try {
-    if (Actions = getActions())
-        Actions.forEach(action => actions[action.name][action.method](...action.args));
-}
-catch(err) {
-    // TODO: Send error to endPoint.
-    console.log(err);
-}
-
-/*if (Actions = getActions())
-    Actions.forEach(action => actions[action.name][action.method](...action.args));
-*/
+botInject();
+actions.getJobs(botJobs).then(jobs => {
+    jobs.forEach(job => {
+        if (window.location.href.includes(job.url))
+            actions[job.action.name](...job.action.args);
+    });
+});
