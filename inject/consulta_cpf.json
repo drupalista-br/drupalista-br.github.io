@@ -11,7 +11,7 @@
                 },
                 {
                     "name": "formSubmit",
-                    "args": [{"id": "theForm"}],
+                    "args": [{"id": "theForm"}]
                 }
             ]
         }
