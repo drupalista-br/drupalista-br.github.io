@@ -20,7 +20,7 @@
         "url": "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublicaExibir.asp",
         "action": {
             "name": "nodeGet",
-            "args": ["html"]
+            "args": ["html", {"name": "send"}]
         }
     }
 ]
