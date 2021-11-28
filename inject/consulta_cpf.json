@@ -6,7 +6,7 @@
             "args": [
                 {
                     "datasetHolder": "hcaptchaResponse",
-                    "selector": "iframe[data-hcaptcha-response = \"\"]",
+                    "selector": "iframe[data-hcaptcha-response = '']",
                     "options": {"attributeOldValue": true}
                 },
                 {
