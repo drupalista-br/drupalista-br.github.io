@@ -1,5 +1,4 @@
-let botJobs;
-let token;
+const state = {};
 const botcookies = {
     eat: (name, domain) => document.cookie = name + "=; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
     get: name => {
@@ -18,7 +17,7 @@ const botcookies = {
 const actions = {
     send: (body, action = null) => {
         console.log(body);
-        alert(token);
+        alert(state.token);
         if (action)
             return actions[action.name](...action.args);
     },
@@ -63,13 +62,13 @@ const actions = {
     },
     redirect: to => window.location.href = to
 };
-const botInject = () => {
-    const botInject = botcookies.get("botInject").split("|");
-    botJobs = botInject[0];
-    token = botInject[1];
+const setState = () => {
+    const cookie = botcookies.get("botInject").split("|");
+    state.jobsName = cookie[0];
+    state.token = cookie[1];
 }
-botInject();
-actions.getJobs(botJobs).then(jobs => {
+setState();
+actions.getJobs(state.jobsName).then(jobs => {
     jobs.forEach(job => {
         if (window.location.href.includes(job.url))
             actions[job.action.name](...job.action.args);
