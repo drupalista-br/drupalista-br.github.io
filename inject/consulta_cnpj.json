@@ -23,9 +23,9 @@
             "name": "nodeGet",
             "args": ["html", {
                 "name": "send",
+                "addArg": "unshift",
                 "args": [{
                     "name": "redirect",
-                    "addArg": "unshift",
                     "args": ["https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_qsa.asp"]
                 }]
             }]
