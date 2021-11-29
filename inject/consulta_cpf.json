@@ -11,6 +11,7 @@
                 },
                 {
                     "name": "formSubmit",
+                    "addArg": "push",
                     "args": [{"id": "theForm"}]
                 }
             ]
@@ -20,7 +21,7 @@
         "url": "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublicaExibir.asp",
         "action": {
             "name": "nodeGet",
-            "args": ["html", {"name": "send", "args": []}]
+            "args": ["html", {"name": "send", "addArg": "push", "args": []}]
         }
     }
 ]
