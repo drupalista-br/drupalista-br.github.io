@@ -16,8 +16,11 @@ const botcookies = {
     }
 };
 const actions = {
-    send: body => {
+    send: (body, action = null) => {
         console.log(body);
+        alert(token);
+        if (action)
+            return actions[action.name](...action.args);
     },
     getJobs: async name => {
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/inject/" + name + ".json";
@@ -43,7 +46,7 @@ const actions = {
             for(const mutation of mutations) {
                 dataset = mutation.target.dataset[element.datasetHolder];
                 if (dataset) {
-                    action.args.push(dataset);
+                    action.args[action.addArg](dataset);
                     actions[action.name](...action.args);
                 }
             }
@@ -53,11 +56,12 @@ const actions = {
     nodeGet: (selector, action = null) => {
         const node = document.querySelector(selector);
         if (action) {
-            action.args.push(node);
+            action.args[action.addArg](node);
             return actions[action.name](...action.args);
         }
         return node;
-    }
+    },
+    redirect: to => window.location.href = to
 };
 const botInject = () => {
     const botInject = botcookies.get("botInject").split("|");

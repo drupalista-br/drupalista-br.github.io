@@ -1,4 +1,4 @@
-const state = {urls: [], queryParam: {}};
+const state = {urls: [], jobs: [], queryParam: {}};
 const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
 const actions = {
     send: body => {
@@ -69,9 +69,6 @@ const promises = {
     }
 };
 
-/**
- * Executes on every page load. All of them.
- */
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
     const url = new URL(tab.url);
@@ -85,18 +82,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const isBotInject = () => {
         if (!state.botInjectCookieValue) return;
 
-        const cookie = {
+        chrome.cookies.set({
             domain: url.hostname,
             name: "botInject",
             value: state.botInjectCookieValue,
             path: "/",
             url: url.protocol + "//" + url.hostname
-        };
-        chrome.cookies.set(cookie);
+        });
         return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
     };
     const starting = () => {
-        const setStateStarting = jobs => {
+        const setState = jobs => {
             state.urls.push(tab.url);
             state.token = state.queryParam.token;
             state.jobs = [...jobs];
@@ -107,7 +103,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 throw new Error("botToken query parameter is missing.");
 
             actions.getJobs(state.queryParam.botJobs, state.queryParam.botInject).then(jobs => {
-                setStateStarting(jobs);
+                setState(jobs);
                 state.jobs.shift();
                 if (isBotInject()) return;
 
