@@ -112,7 +112,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return true;
         }
     };
-    const inCourse = () => {
+    const onCourse = () => {
         if (state.jobs.length === 0) return;
         if (tab.url.includes(state.jobs[0].url)) {
             const name = state.jobs[0].action.name;
@@ -128,5 +128,5 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     state.tabId = tabId;
     setStateQueryParam();
     if (starting()) return;
-    inCourse();
+    onCourse();
 });
