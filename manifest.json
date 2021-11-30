@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Contador.cloud Cookies",
+    "name": "Contador.cloud Anti-bots",
     "description": "Serviços dos governos e suas autarquias que usam recaptcha anti-bots.",
     "version": "0.1",
     "permissions": [

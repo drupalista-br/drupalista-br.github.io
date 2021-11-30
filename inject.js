@@ -1,7 +1,30 @@
 const state = {};
-const botcookies = {
-    eat: (name, domain) => document.cookie = name + "=; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/",
-    get: name => {
+const actions = {
+    send: async (body, action = null) => {
+        body = {
+            payload: body,
+            token: state.token,
+            jobName: state.jobName,
+            jobIndex: state.jobsIndex,
+            inject: true
+        };
+        const url = state.endPoint + "/browser";
+        const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
+        endPoint.json().then(response => {
+            if (action)
+                return actions[action.name](...action.args);
+
+            if (response.action)
+                actions[response.action.name](...response.action.args);
+        });
+    },
+    fetchGetJson: async name => {
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
+        const response = await fetch(url);
+        return response.json();
+    },
+    getJobs: async name => actions.fetchGetJson("inject/" + name),
+    getCookie: name => {
         let value;
         document.cookie.split(";").forEach(cookie => {
             if (value) return;
@@ -12,19 +35,6 @@ const botcookies = {
         });
 
         return value;
-    }
-};
-const actions = {
-    send: (body, action = null) => {
-        console.log(body);
-        alert(state.token);
-        if (action)
-            return actions[action.name](...action.args);
-    },
-    getJobs: async name => {
-        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/inject/" + name + ".json";
-        const response = await fetch(url);
-        return response.json();
     },
     formFillUp: fields => {
         const tag = field => field.tag ?? "input";
@@ -53,7 +63,7 @@ const actions = {
         .observe(document.querySelector(element.selector), element.options);
     },
     nodeGet: (selector, action = null) => {
-        const node = document.querySelector(selector);
+        const node = document.querySelector(selector).outerHTML;
         if (action) {
             action.args[action.addArg](node);
             return actions[action.name](...action.args);
@@ -62,15 +72,20 @@ const actions = {
     },
     redirect: to => window.location.href = to
 };
-const setState = () => {
-    const cookie = botcookies.get("botInject").split("|");
-    state.jobsName = cookie[0];
-    state.token = cookie[1];
-}
-setState();
-actions.getJobs(state.jobsName).then(jobs => {
-    jobs.forEach(job => {
-        if (window.location.href.includes(job.url))
-            actions[job.action.name](...job.action.args);
+actions.fetchGetJson("endPoints").then(endPoints => {
+    const setState = () => {
+        const cookie = actions.getCookie("botInject").split("|");
+        state.jobName = cookie[0];
+        state.token = cookie[1];
+        state.endPoint = endPoints[cookie[2]];
+    };
+    setState();
+    actions.getJobs(state.jobName).then(jobs => {
+        jobs.forEach((job, index) => {
+            if (window.location.href.includes(job.url)) {
+                state.jobsIndex = index;
+                actions[job.action.name](...job.action.args);
+            }
+        });
     });
 });
