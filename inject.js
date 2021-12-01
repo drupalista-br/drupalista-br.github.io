@@ -4,7 +4,7 @@ const actions = {
         body = {
             payload: body,
             token: state.token,
-            jobName: state.jobName,
+            job: state.job,
             taskIndex: state.taskIndex,
             inject: true
         };
@@ -75,12 +75,12 @@ const actions = {
 actions.fetchGetJson("endPoints").then(endPoints => {
     const setState = () => {
         const cookie = actions.getCookie("botInject").split("|");
-        state.jobName = cookie[0];
+        state.job = cookie[0];
         state.token = cookie[1];
         state.endPoint = endPoints[cookie[2]];
     };
     setState();
-    actions.getTasks(state.jobName).then(tasks => {
+    actions.getTasks(state.job).then(tasks => {
         tasks.forEach((task, index) => {
             if (window.location.href.includes(task.url)) {
                 state.taskIndex = index;
