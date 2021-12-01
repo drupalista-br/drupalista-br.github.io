@@ -5,7 +5,7 @@ const actions = {
             payload: body,
             token: state.token,
             jobName: state.jobName,
-            jobIndex: state.jobsIndex,
+            taskIndex: state.taskIndex,
             inject: true
         };
         const url = state.endPoint + "/browser";
@@ -23,7 +23,7 @@ const actions = {
         const response = await fetch(url);
         return response.json();
     },
-    getJobs: async name => actions.fetchGetJson("inject/" + name),
+    getTasks: async job => actions.fetchGetJson("inject/" + job),
     getCookie: name => {
         let value;
         document.cookie.split(";").forEach(cookie => {
@@ -80,11 +80,11 @@ actions.fetchGetJson("endPoints").then(endPoints => {
         state.endPoint = endPoints[cookie[2]];
     };
     setState();
-    actions.getJobs(state.jobName).then(jobs => {
-        jobs.forEach((job, index) => {
-            if (window.location.href.includes(job.url)) {
-                state.jobsIndex = index;
-                actions[job.action.name](...job.action.args);
+    actions.getTasks(state.jobName).then(tasks => {
+        tasks.forEach((task, index) => {
+            if (window.location.href.includes(task.url)) {
+                state.taskIndex = index;
+                actions[task.action.name](...task.action.args);
             }
         });
     });

