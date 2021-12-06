@@ -35,7 +35,7 @@
         "url": "https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_qsa.asp",
         "action": {
             "name": "nodeGet",
-            "args": ["#principal", {
+            "args": ["#app", {
                 "name": "send",
                 "addArg": "push",
                 "args": []
