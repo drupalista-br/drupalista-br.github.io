@@ -16,6 +16,7 @@ const actions = {
         });
     },
     fetchGetJson: async name => {
+        // https://github.com/drupalista-br/drupalista-br.github.io/tree/json
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
         const response = await fetch(url);
         return response.json();
@@ -82,7 +83,6 @@ const promises = {
     }
 };
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status !== 'complete') return;
     const url = new URL(tab.url);
     const setStateQueryParam = () => {
         state.queryParam = {
@@ -108,9 +108,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         const setState = (tasks, endPoints) => {
             const endPoint = () => state.queryParam.endPoint ?? "remote";
             const cookieValue = () => {
-                const value = state.queryParam.botJob + "|" + state.queryParam.token + "|" + endPoint();
+                const value = () => state.queryParam.botJob + "|" + state.queryParam.token + "|" + endPoint();
                 if (state.queryParam.botInject)
-                    return value;
+                    return value();
             };
             state.urls.push(tab.url);
             state.token = state.queryParam.token;
@@ -148,9 +148,29 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             actions[name](...args);
         }
     };
+    const tabStatus = () => {
+        const neededStatus = url.searchParams.get("botTabStatus") ?? 'loading';
+        if (changeInfo.status === neededStatus)
+            return true;
+    };
+    if (!tabStatus()) return;
 
     state.tabId = tabId;
     setStateQueryParam();
     if (starting()) return;
     onCourse();
 });
+
+/*
+== cpf ==
+https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp?cpf=81910851191&nascimento=25/08/1979&botJob=consulta_cpf&botInject&botToken=teste&botEndPoint=local
+
+== cnpj e qsa ==
+https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=84432111000400&botJob=consulta_cnpj&botInject&botToken=teste22&botEndPoint=local
+https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=03835832000116&botJob=consulta_cnpj&botInject&botToken=teste22&botEndPoint=local
+
+
+== Cookies Ecac ===
+
+chrome://newtab/?botJobs=ecac_acesso_gov_certificate&botToken=teste2&botEndPoint=local
+*/
