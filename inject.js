@@ -19,6 +19,7 @@ const actions = {
         });
     },
     fetchGetJson: async name => {
+        // https://github.com/drupalista-br/drupalista-br.github.io/tree/json
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
         const response = await fetch(url);
         return response.json();
