@@ -3,6 +3,7 @@ const actions = {
     send: async (body, action = null) => {
         body = {
             payload: body,
+            gfk: state.gfk,
             token: state.token,
             job: state.job,
             taskIndex: state.taskIndex,
@@ -77,8 +78,9 @@ actions.fetchGetJson("endPoints").then(endPoints => {
     const setState = () => {
         const cookie = actions.getCookie("botInject").split("|");
         state.job = cookie[0];
-        state.token = cookie[1];
-        state.endPoint = endPoints[cookie[2]];
+        state.gfk = cookie[1];
+        state.token = cookie[2];
+        state.endPoint = endPoints[cookie[3]];
     };
     setState();
     actions.getTasks(state.job).then(tasks => {
