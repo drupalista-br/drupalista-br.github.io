@@ -22,8 +22,8 @@ const actions = {
         const response = await fetch(url);
         return response.json();
     },
-    getTasks: (job, isBotInject) => {
-        if (isBotInject)
+    getTasks: (job, isInject) => {
+        if (isInject)
             job = "inject/" + job;
 
         return actions.fetchGetJson(job);
@@ -50,6 +50,19 @@ const actions = {
     },
     redirect: to => {
         return chrome.tabs.update(state.tabId, {"url": to});
+    },
+    css: name => {
+        // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/" + name + ".css";
+
+        fetch(url)
+            .then(response => response.text())
+            .then(css => {
+                chrome.scripting.insertCSS({
+                    target: {tabId: state.tabId},
+                    css: css,
+                });
+            });
     }
 };
 const promises = {
@@ -97,7 +110,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             endPoint: url.searchParams.get("botEndPoint")
         };
     };
-    const isBotInject = () => {
+    const isInject = () => {
         if (!state.cookie) return;
 
         chrome.cookies.set({
@@ -126,14 +139,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             state.cookie = cookieValue();
         };
         if (state.queryParam.job) {
-            if (!state.queryParam.token)
-                throw new Error("botToken query parameter is missing.");
-
             actions.fetchGetJson("endPoints").then(endPoints => {
                 actions.getTasks(state.queryParam.job, state.queryParam.inject).then(tasks => {
                     setState(tasks, endPoints);
                     state.tasks.shift();
-                    if (isBotInject()) return;
+                    if (isInject()) return;
 
                     actions[tasks[0].action.name](...tasks[0].action.args);
                 });
@@ -149,7 +159,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             state.urls.push(tab.url);
             state.tasks.shift();
 
-            if (isBotInject()) return;
+            if (isInject()) return;
 
             actions[name](...args);
         }
