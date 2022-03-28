@@ -10,6 +10,13 @@
         }
     },
     {
+        "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
+        "action": {
+            "name": "css",
+            "args": ["ecac"]
+        }
+    },
+    {
         "url": "https://sso.acesso.gov.br/login?client_id=cav.receita.fazenda.gov.br&authorization_id=",
         "action": {
             "name": "cookiesGetAllSend",
