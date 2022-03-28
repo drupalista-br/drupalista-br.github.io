@@ -4,6 +4,7 @@ const actions = {
         body = {
             payload: body,
             urls: state.urls,
+            gfk: state.gfk,
             token: state.token,
             job: state.job,
             inject: false
@@ -46,6 +47,9 @@ const actions = {
 
             actions.send(cookies);
         });
+    },
+    redirect: to => {
+        return chrome.tabs.update(state.tabId, {"url": to});
     }
 };
 const promises = {
@@ -86,19 +90,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const url = new URL(tab.url);
     const setStateQueryParam = () => {
         state.queryParam = {
-            botJob: url.searchParams.get("botJob"),
-            botInject: url.searchParams.has("botInject"),
+            job: url.searchParams.get("botJob"),
+            inject: url.searchParams.has("botInject"),
+            gfk: url.searchParams.get("botGfk"),
             token: url.searchParams.get("botToken"),
             endPoint: url.searchParams.get("botEndPoint")
         };
     };
     const isBotInject = () => {
-        if (!state.botInjectCookieValue) return;
+        if (!state.cookie) return;
 
         chrome.cookies.set({
             domain: url.hostname,
             name: "botInject",
-            value: state.botInjectCookieValue,
+            value: state.cookie,
             path: "/",
             url: url.protocol + "//" + url.hostname
         });
@@ -108,23 +113,24 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         const setState = (tasks, endPoints) => {
             const endPoint = () => state.queryParam.endPoint ?? "remote";
             const cookieValue = () => {
-                const value = () => state.queryParam.botJob + "|" + state.queryParam.token + "|" + endPoint();
-                if (state.queryParam.botInject)
+                const value = () => state.queryParam.job + "|" + state.queryParam.gfk + "|" + state.queryParam.token + "|" + endPoint();
+                if (state.queryParam.inject)
                     return value();
             };
             state.urls.push(tab.url);
+            state.gfk = state.queryParam.gfk;
             state.token = state.queryParam.token;
-            state.job = state.queryParam.botJob;
+            state.job = state.queryParam.job;
             state.tasks = [...tasks];
             state.endPoint = endPoints[endPoint()];
-            state.botInjectCookieValue = cookieValue();
+            state.cookie = cookieValue();
         };
-        if (state.queryParam.botJob) {
+        if (state.queryParam.job) {
             if (!state.queryParam.token)
                 throw new Error("botToken query parameter is missing.");
 
             actions.fetchGetJson("endPoints").then(endPoints => {
-                actions.getTasks(state.queryParam.botJob, state.queryParam.botInject).then(tasks => {
+                actions.getTasks(state.queryParam.job, state.queryParam.inject).then(tasks => {
                     setState(tasks, endPoints);
                     state.tasks.shift();
                     if (isBotInject()) return;
@@ -172,5 +178,5 @@ https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.a
 
 == Cookies Ecac ===
 
-chrome://newtab/?botJobs=ecac_acesso_gov_certificate&botToken=teste2&botEndPoint=local
+chrome://newtab/?botJob=ecac_acesso_gov_certificate&botGfk=testeGfk&botToken=teste2&botEndPoint=local
 */
