@@ -5,11 +5,10 @@ const actions = {
             payload: body,
             gfk: state.gfk,
             token: state.token,
-            job: state.job,
             taskIndex: state.taskIndex,
             inject: true
         };
-        const url = state.endPoint + "/browser";
+        const url = state.endPoint + "/browser/" + state.job;
         const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
         endPoint.json().then(response => {
             if (action)
@@ -71,6 +70,16 @@ const actions = {
             return actions[action.name](...action.args);
         }
         return node;
+    },
+    css: name => {
+        // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/inject/" + name + ".css";
+        fetch(url)
+            .then(response => response.text())
+            .then(css => {
+                const style = "<style>" + css + "</style>";
+                document.head.insertAdjacentHTML('beforeend', style);
+            });
     },
     redirect: to => window.location.href = to
 };
