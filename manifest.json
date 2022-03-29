@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Contador.cloud Anti-bots",
-    "description": "Serviços dos governos e suas autarquias que usam recaptcha anti-bots.",
+    "name": "Bót.com | Anti-bots",
+    "description": "Intermedia a resolução de desafios anti robôs tais como o recaptcha e o hcaptcha.",
     "version": "0.1",
     "permissions": [
         "cookies",
@@ -19,7 +19,7 @@
     },
     "action": {
         "default_icon": "icon.png",
-        "default_title": "Contador.Cloud"
+        "default_title": "Bót.com"
     },
     "icons": {
         "16": "icon.png",
