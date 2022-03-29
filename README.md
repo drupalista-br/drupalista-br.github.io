@@ -5,5 +5,6 @@ anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](htt
 a resolução do desafio os cookies são enviados ao nosso bót para dá continuidade ao trabalho sendo executado.
 
 ## Informações que coletamos:
-- Os cookies de uma sessão quando o bót precisa executar um trabalho em um servidor protegido por desafios anti robôs;
+- Os cookies de uma sessão quando o bót precisa executar um trabalho em um servidor ( receita.fazenda.gov.br por exemplo )
+protegido por desafios anti robôs;
 - O resultado de consultas, tais como as páginas HTMLs retornadas nas consultas do CNPJ e do CPF.
