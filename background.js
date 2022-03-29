@@ -6,10 +6,9 @@ const actions = {
             urls: state.urls,
             gfk: state.gfk,
             token: state.token,
-            job: state.job,
             inject: false
         };
-        const url = state.endPoint + "/browser";
+        const url = state.endPoint + "/browser/" + state.job;
         const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
         endPoint.json().then(response => {
             if (response.action)
@@ -54,7 +53,6 @@ const actions = {
     css: name => {
         // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/" + name + ".css";
-
         fetch(url)
             .then(response => response.text())
             .then(css => {
