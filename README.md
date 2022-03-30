@@ -5,7 +5,7 @@ anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](htt
 
 ## Após a resolução do desafio pelo humano, são capturados:
 - Os [cookies](https://pt.wikipedia.org/wiki/Cookie_%28inform%C3%A1tica%29) ou;
-- A [paǵina HTML](https://pt.wikipedia.org/wiki/P%C3%A1gina_de_rede) carregadas após a resolução do desafio,
+- A [paǵina HTML](https://pt.wikipedia.org/wiki/P%C3%A1gina_de_rede) retornada após a resolução do desafio,
 tais como consultas do CNPJ e do CPF ou;
 - Ambos os cookies e a página HTML resultante. Normalemente é capturado apenas um dos itens anteriores.
 
