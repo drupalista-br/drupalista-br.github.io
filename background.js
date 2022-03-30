@@ -193,12 +193,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             });
         };
         if (state.queryParam.job) {
-            chrome.cookies.get({name: 'browserExtention', url: "https://" + hostname},
-                cookie => {
-                    if (!cookie)
-                        check();
-                },
-            );
+            chrome.cookies.get({name: 'browserExtention', url: "https://" + hostname}, cookie => {
+                if (!cookie)
+                    check();
+            });
         }
     };
     if (!tabStatus()) return;
