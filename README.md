@@ -1,13 +1,12 @@
-# Bót.online | Anti-bots
+# [Bót.online](https://bót.online) | Anti-bots
 
-[Google chrome extension](https://bót.online) transfere para um humano a tarefa de resolver o desafio
+Esta extensão transfere para um humano a tarefa de resolver o desafio
 anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](https://www.google.com/recaptcha).
 
-## Após a resolução do desafio pelo humano, coletamos:
-- Os [cookies](https://pt.wikipedia.org/wiki/Cookie_%28inform%25C3%25A1tica%29) ou;
-- A [paǵina HTML](https://pt.wikipedia.org/wiki/P%C3%A1gina_de_rede) contendo resultados de consultas, tais como
-consultas do CNPJ e do CPF ou;
-- Ambos os cookies e uma ou mais páginas HTMLs.
+## Após a resolução do desafio pelo humano, são capturados:
+- Os [cookies](https://pt.wikipedia.org/wiki/Cookie_(inform%C3%A1tica%29) ou;
+- A [paǵina HTML](https://pt.wikipedia.org/wiki/P%C3%A1gina_de_rede) carregadas após a resolução do desafio,
+tais como consultas do CNPJ e do CPF ou;
+- Ambos os cookies e a página HTML resultante. Normalemente é capturado apenas um dos itens anteriores.
 
-Os dados coletados por esta extensão são então enviadas ao nosso servidor remoto no endereço
-https://api.bót.online/browser .
+Os dados capturados são então enviadas ao nosso servidor no endereço https://api.bót.online/browser .
