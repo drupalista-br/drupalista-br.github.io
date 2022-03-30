@@ -4,7 +4,10 @@
 anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](https://www.google.com/recaptcha).
 
 ## Após a resolução do desafio pelo humano, coletamos:
-- Os cookies ( receita.fazenda.gov.br por exemplo );
-- A paǵina HTML contendo resultados de consultas, tais como a consulta do CNPJ e do CPF.
+- Os [cookies](https://pt.wikipedia.org/wiki/Cookie_%28inform%25C3%25A1tica%29) ou;
+- A [paǵina HTML](https://pt.wikipedia.org/wiki/P%C3%A1gina_de_rede) contendo resultados de consultas, tais como
+consultas do CNPJ e do CPF ou;
+- Ambos os cookies e uma ou mais páginas HTMLs.
 
-Os dados coletados por esta extensão são enviadas ao nosso servidor remoto ( https://api.bót.online/browser ).
+Os dados coletados por esta extensão são então enviadas ao nosso servidor remoto no endereço
+https://api.bót.online/browser .
