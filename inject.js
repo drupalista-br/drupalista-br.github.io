@@ -3,12 +3,13 @@ const actions = {
     send: async (body, action = null) => {
         body = {
             payload: body,
+            job: state.job,
             gfk: state.gfk,
             token: state.token,
             taskIndex: state.taskIndex,
             inject: true
         };
-        const url = state.endPoint + "/browser/" + state.job;
+        const url = state.endPoint + "/browser";
         const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
         endPoint.json().then(response => {
             if (action)
