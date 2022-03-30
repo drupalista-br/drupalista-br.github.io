@@ -4,20 +4,21 @@ const actions = {
         body = {
             payload: body,
             urls: state.urls,
+            job: state.job,
             gfk: state.gfk,
             token: state.token,
             inject: false
         };
-        const url = state.endPoint + "/browser/" + state.job;
+        const url = state.endPoint + "/browser";
         const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
         endPoint.json().then(response => {
             if (response.action)
                 actions[response.action.name](...response.action.args);
         });
     },
-    fetchGetJson: async name => {
+    fetchGetJson: async (name, repo = 'json') => {
         // https://github.com/drupalista-br/drupalista-br.github.io/tree/json
-        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
+        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name + ".json";
         const response = await fetch(url);
         return response.json();
     },
@@ -36,8 +37,9 @@ const actions = {
         });
     },
     cookiesEatReload: (domains, to) => {
-        actions.cookiesEat(domains)
-        .then(results => chrome.tabs.update(state.tabId, {"url": to}));
+        actions
+            .cookiesEat(domains)
+            .then(results => chrome.tabs.update(state.tabId, {"url": to}));
     },
     cookiesGetAllSend: domains => {
         Promise.all(promises.cookiesGetAll(domains)).then(jars => {
@@ -167,11 +169,45 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         if (changeInfo.status === neededStatus)
             return true;
     };
+    const updateCheck = () => {
+        const hostname = 'bót.com'; // bót.com = xn--bt-5ja.com
+        const check = () => {
+            const installedVersion = () => chrome.runtime.getManifest().version;
+            const setCookie = () => {
+                const time = Math.floor(Date.now() / 1000);
+                chrome.cookies.set({
+                    domain: hostname,
+                    expirationDate: time + 864000, // 10 days
+                    name: "browserExtention",
+                    value: "updateCheck",
+                    path: "/",
+                    url: "https://" + hostname
+                });
+            };
+            actions.fetchGetJson('manifest', 'browser').then(manifestLatest => {
+                const isUpToDate = manifestLatest.version === installedVersion();
+                if (isUpToDate)
+                    return setCookie();
+
+                console.log('TODO: redirect to instructions page.');
+            });
+        };
+        if (state.queryParam.job) {
+            chrome.cookies.get({name: 'browserExtention', url: "https://" + hostname},
+                cookie => {
+                    if (!cookie)
+                        check();
+                },
+            );
+        }
+    };
     if (!tabStatus()) return;
 
     state.tabId = tabId;
     setStateQueryParam();
+    updateCheck();
     if (starting()) return;
+
     onCourse();
 });
 
