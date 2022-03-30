@@ -1,6 +1,6 @@
-# Bót.com | Anti-bots
+# Bót.online | Anti-bots
 
-[Google chrome extension](https://bót.com) transfere para um humano a tarefa de resolver o desafio
+[Google chrome extension](https://bót.online) transfere para um humano a tarefa de resolver o desafio
 anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](https://www.google.com/recaptcha). Após
 a resolução do desafio pelo humano, os cookies são enviados ao nosso bót para ele dá continuidade ao serviço em execução.
 

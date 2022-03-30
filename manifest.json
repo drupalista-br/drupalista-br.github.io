@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Bót.com | Anti-bots",
+    "name": "Bót.online | Anti-bots",
     "description": "Intermedia a resolução de desafios anti robôs tais como o recaptcha e o hcaptcha.",
     "version": "0.1",
     "permissions": [
@@ -19,7 +19,7 @@
     },
     "action": {
         "default_icon": "icon.png",
-        "default_title": "Bót.com"
+        "default_title": "Bót.online"
     },
     "icons": {
         "16": "icon.png",

@@ -170,7 +170,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return true;
     };
     const updateCheck = () => {
-        const hostname = 'bót.com'; // bót.com = xn--bt-5ja.com
+        const hostname = 'bót.online'; // bót.online = xn--bt-5ja.online
         const check = () => {
             const installedVersion = () => chrome.runtime.getManifest().version;
             const setCookie = () => {
