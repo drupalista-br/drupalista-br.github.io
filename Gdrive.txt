@@ -1,0 +1,2 @@
+Linux: https://github.com/odeke-em/drive
+Windows: https://www.google.com/intl/pt-BR/drive/download
