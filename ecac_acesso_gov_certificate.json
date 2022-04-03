@@ -4,7 +4,7 @@
         "actions": [
             {"name": "cookies.deleteAll", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]},
             {"name": "redirect", "args": ["https://cav.receita.fazenda.gov.br/autenticacao/login"]}
-        ],
+        ]
     },
     {
         "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
