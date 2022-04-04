@@ -51,7 +51,7 @@ const actions = {
                 });
             });
         },
-        set: jars => jars.map(jar => jar.map(cookie => chrome.cookies.set(cookie))),
+        set: jar => jar.map(cookie => chrome.cookies.set(cookie)),
         send: domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
     },
     css: files => {
