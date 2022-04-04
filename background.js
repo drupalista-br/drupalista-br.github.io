@@ -3,40 +3,31 @@
 //   it gotta be either for...of or .map
 const state = {urls: [], tasks: []};
 const endPoint = () => state.queryParam.endPoint ?? "remote";
-const request = (repo, name) => {
+const ghUrl = (repo, name) => {
     // https://github.com/drupalista-br/drupalista-br.github.io/tree/[repo]
-    return {url: "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name};
+    return "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name;
+};
+const http = {
+    api: data => {
+        const url = state.endPoint + "/browser";
+        const body = {
+            state: state,
+            data: data,
+        };
+        fetch(url, {method: 'POST', body: JSON.stringify(body)})
+            .then(response => response.json())
+            .then(tasks => tasks.map(task => action(task.name)(...task.args)));
+    },
+    github: async (url, type = 'json') => {
+        var data;
+        await fetch(url)
+            .then(response => response[type]())
+            .then(content => data = content);
+
+        return data;
+    }
 };
 const actions = {
-    fetch: async (request, type = 'json') => {
-        var Return;
-        var data = {}; // a GET by default.
-        const api = () => {
-            const body = {
-                state: state,
-                request: request,
-            };
-            return {method: 'POST', body: JSON.stringify(body)};
-        };
-        const http = async () => {
-            var Return;
-            await fetch(request.url, data)
-                .then(response => response[type]())
-                .then(content => Return = content);
-
-            return Return;
-        };
-        if (request.api) {
-            request.url = state.endPoint + "/browser";
-            data = api();
-            return http().then(tasks => tasks.map(task => action(task.name)(...task.args)));
-        }
-
-        // Github GETs
-        await http().then(content => Return = content);
-
-        return Return;
-    },
     cookies: {
         getAll: async domains => {
             const jar = {};
@@ -48,7 +39,7 @@ const actions = {
             return jar;
         },
         deleteAll: async domains => {
-            var Return = {};
+            var cookies = {};
             const url = cookie => {
                 if (cookie.domain.charAt(0) === ".")
                     cookie.domain = cookie.domain.replace(".", "");
@@ -60,28 +51,21 @@ const actions = {
                     for (const cookie of jar[domain]) {
                         await chrome.cookies.remove({url: url(cookie), name: cookie.name}).then(cookie => {
                             // cookie contains only name, storeId and url.
-                            if (Array.isArray(Return[domain]))
-                                return Return[domain].push(cookie);
+                            if (Array.isArray(cookies[domain]))
+                                return cookies[domain].push(cookie);
 
-                            Return[domain] = [cookie];
+                            cookies[domain] = [cookie];
                         });
                     }
                 }));
             });
-            return Return;
+            return cookies;
         },
-        send: async domains => {
-            var Return;
-            await actions.cookies.getAll(domains).then(async jar => {
-                const request = {api: true, jar: jar};
-                await actions.fetch(request).then(content => Return = content);
-            });
-            return Return;
-        }
+        send: domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
     },
     css: files => {
         files.map(file => {
-            actions.fetch(request('css', file + ".css"), 'text').then(css => {
+            http.github(ghUrl('css', file + ".css"), 'text').then(css => {
                 chrome.scripting.insertCSS({
                     target: {tabId: state.tabId},
                     css: css,
@@ -148,8 +132,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             state.cookie = cookieValue();
         };
         if (state.queryParam.job) {
-            actions.fetch(request('json', 'endPoints.json')).then(endPoints => {
-                actions.fetch(request('json', state.queryParam.job + '.json')).then(tasks => {
+            http.github(ghUrl('json', 'endPoints.json')).then(endPoints => {
+                http.github(ghUrl('json', state.queryParam.job + '.json')).then(tasks => {
                     setState(tasks, endPoints);
                     state.tasks.shift();
                     if (isInject()) return;
