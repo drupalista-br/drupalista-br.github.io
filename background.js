@@ -10,7 +10,7 @@ const request = (repo, name) => {
 const actions = {
     fetch: async (request, type = 'json') => {
         var Return;
-        var data = {};
+        var data = {}; // a GET by default.
         const api = () => {
             const body = {
                 state: state,
@@ -18,14 +18,22 @@ const actions = {
             };
             return {method: 'POST', body: JSON.stringify(body)};
         };
+        const http = async () => {
+            var Return;
+            await fetch(request.url, data)
+                .then(response => response[type]())
+                .then(content => Return = content);
+
+            return Return;
+        };
         if (request.api) {
             request.url = state.endPoint + "/browser";
             data = api();
+            return http().then(content => content.map(task => action(task.name)(...task.args)));
         }
 
-        await fetch(request.url, data)
-            .then(response => response[type]())
-            .then(content => Return = content);
+        // Github GETs
+        await http().then(content => Return = content);
 
         return Return;
     },
@@ -81,9 +89,16 @@ const actions = {
             });
         });
     },
-    redirect: to => {
-        return chrome.tabs.update(state.tabId, {"url": to});
-    }
+    alert: (title, msg) => {
+        chrome.notifications.create('bót.online', {
+            message: msg,
+            type: 'basic',
+            requireInteraction: true,
+            title: title,
+            iconUrl: 'https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/browser/icon.png'
+        });
+    },
+    redirect: to => chrome.tabs.update(state.tabId, {"url": to})
 };
 const action = path => {
     var action = actions;
