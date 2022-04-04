@@ -1,7 +1,7 @@
 // https://stackoverflow.com/a/37576787/859837 | Using async/await with a forEach loop
 //   async / await does not wort in .forEach
 //   it gotta be either for...of or .map
-const state = {urls: []};
+const state = {urls: [], tasks: []};
 const endPoint = () => state.queryParam.endPoint ?? "remote";
 const request = (repo, name) => {
     // https://github.com/drupalista-br/drupalista-br.github.io/tree/[repo]
@@ -89,11 +89,11 @@ const actions = {
             });
         });
     },
-    alert: (title, msg) => {
+    alert: (message, requireInteraction = false, title = 'Bót.Online') => {
         chrome.notifications.create('bót.online', {
-            message: msg,
+            message: message,
             type: 'basic',
-            requireInteraction: true,
+            requireInteraction: requireInteraction,
             title: title,
             iconUrl: 'https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/browser/icon.png'
         });
