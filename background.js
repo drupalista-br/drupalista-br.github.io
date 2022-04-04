@@ -29,7 +29,7 @@ const actions = {
         if (request.api) {
             request.url = state.endPoint + "/browser";
             data = api();
-            return http().then(content => content.map(task => action(task.name)(...task.args)));
+            return http().then(tasks => tasks.map(task => action(task.name)(...task.args)));
         }
 
         // Github GETs
