@@ -38,29 +38,20 @@ const actions = {
             }));
             return jar;
         },
-        deleteAll: async domains => {
-            var cookies = {};
+        deleteAll: domains => {
             const url = cookie => {
                 if (cookie.domain.charAt(0) === ".")
                     cookie.domain = cookie.domain.replace(".", "");
 
                 return "https://" + cookie.domain + cookie.path;
             };
-            await actions.cookies.getAll(domains).then(async jar => {
-                await Promise.all(domains.map(async domain => {
-                    for (const cookie of jar[domain]) {
-                        await chrome.cookies.remove({url: url(cookie), name: cookie.name}).then(cookie => {
-                            // cookie contains only name, storeId and url.
-                            if (Array.isArray(cookies[domain]))
-                                return cookies[domain].push(cookie);
-
-                            cookies[domain] = [cookie];
-                        });
-                    }
-                }));
+            actions.cookies.getAll(domains).then(jar => {
+                domains.map(domain => {
+                    jar[domain].map(cookie => chrome.cookies.remove({url: url(cookie), name: cookie.name}));
+                });
             });
-            return cookies;
         },
+        set: jars => jars.map(jar => jar.map(cookie => chrome.cookies.set(cookie))),
         send: domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
     },
     css: files => {
