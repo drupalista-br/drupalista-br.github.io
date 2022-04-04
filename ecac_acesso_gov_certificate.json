@@ -12,6 +12,9 @@
     },
     {
         "url": "https://sso.acesso.gov.br/login?client_id=cav.receita.fazenda.gov.br&authorization_id=",
-        "actions": [{"name": "cookies.send", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]}]
+        "actions": [
+            {"name": "cookies.send", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]},
+            {"name": "cookies.deleteAll", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]}
+        ]
     }
 ]
