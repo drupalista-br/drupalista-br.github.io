@@ -83,7 +83,7 @@ const action = (task, chain) => {
     if (chain)
         return chain.then(result => get(task.name)(...task.args));
 
-    get(task.name)(...task.args);
+    return get(task.name)(...task.args);
 };
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const url = new URL(tab.url);
