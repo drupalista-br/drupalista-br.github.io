@@ -16,7 +16,10 @@ const http = {
         };
         fetch(url, {method: 'POST', body: JSON.stringify(body)})
             .then(response => response.json())
-            .then(tasks => tasks.map(task => action(task.name)(...task.args)));
+            .then(tasks => {
+                var chain = null;
+                tasks.map(task => chain = action(task, chain));
+            });
     },
     gh: (url, type = 'json') => {
         return fetch(url)
@@ -35,7 +38,7 @@ const actions = {
             }));
             return jar;
         },
-        deleteAll: domains => {
+        deleteAll: async domains => {
             const url = cookie => {
                 if (cookie.domain.charAt(0) === ".")
                     cookie.domain = cookie.domain.replace(".", "");
@@ -48,10 +51,10 @@ const actions = {
                 });
             });
         },
-        set: jar => jar.map(cookie => chrome.cookies.set(cookie)),
-        send: domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
+        set: async jar => jar.map(cookie => chrome.cookies.set(cookie)),
+        send: async domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
     },
-    css: files => {
+    css: async files => {
         files.map(file => {
             http.gh(ghUrl(file, 'css'), 'text').then(css => {
                 chrome.scripting.insertCSS({
@@ -61,20 +64,26 @@ const actions = {
             });
         });
     },
-    alert: (message, requireInteraction = false, title = 'Bót.Online') => {
+    alert: async message => {
         chrome.notifications.create('bót.online', {
             message: message,
             type: 'basic',
-            requireInteraction: requireInteraction,
-            title: title,
+            requireInteraction: false,
+            title: 'Bót.Online',
             iconUrl: 'https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/browser/icon.png'
         });
     },
-    redirect: to => chrome.tabs.update(state.tabId, {"url": to})
+    redirect: async to => chrome.tabs.update(state.tabId, {"url": to})
 };
-const action = path => {
-    var action = actions;
-    return path.split('.').reduce((action, key) => action?.[key], action);
+const action = (task, chain) => {
+    const get = path => {
+        var action = actions;
+        return path.split('.').reduce((action, key) => action?.[key], action);
+    };
+    if (chain)
+        return chain.then(result => get(task.name)(...task.args));
+
+    get(task.name)(...task.args);
 };
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const url = new URL(tab.url);
@@ -127,7 +136,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
                     if (isInject()) return;
 
-                    tasks[0].actions.map(task => action(task.name)(...task.args));
+                    var chain = null;
+                    tasks[0].actions.map(task => chain = action(task, chain));
                 });
             });
             return true;
@@ -143,7 +153,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
             if (isInject()) return;
 
-            tasks.map(task => action(task.name)(...task.args));
+            var chain = null;
+            tasks.map(task => chain = action(task, chain));
         }
     };
     if (!tabStatus()) return;
