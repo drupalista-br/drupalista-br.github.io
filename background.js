@@ -3,9 +3,9 @@
 //   it gotta be either for...of or .map
 const state = {urls: [], tasks: []};
 const endPoint = () => state.queryParam.endPoint ?? "remote";
-const ghUrl = (repo, name) => {
+const ghUrl = (filename, repo = 'json') => {
     // https://github.com/drupalista-br/drupalista-br.github.io/tree/[repo]
-    return "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + name;
+    return "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/" + repo + "/" + filename + "." + repo;
 };
 const http = {
     api: data => {
@@ -18,13 +18,10 @@ const http = {
             .then(response => response.json())
             .then(tasks => tasks.map(task => action(task.name)(...task.args)));
     },
-    github: async (url, type = 'json') => {
-        var data;
-        await fetch(url)
+    gh: (url, type = 'json') => {
+        return fetch(url)
             .then(response => response[type]())
-            .then(content => data = content);
-
-        return data;
+            .then(content => content);
     }
 };
 const actions = {
@@ -56,7 +53,7 @@ const actions = {
     },
     css: files => {
         files.map(file => {
-            http.github(ghUrl('css', file + ".css"), 'text').then(css => {
+            http.gh(ghUrl(file, 'css'), 'text').then(css => {
                 chrome.scripting.insertCSS({
                     target: {tabId: state.tabId},
                     css: css,
@@ -123,10 +120,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             state.cookie = cookieValue();
         };
         if (state.queryParam.job) {
-            http.github(ghUrl('json', 'endPoints.json')).then(endPoints => {
-                http.github(ghUrl('json', state.queryParam.job + '.json')).then(tasks => {
+            http.gh(ghUrl('endPoints')).then(endPoints => {
+                http.gh(ghUrl(state.queryParam.job)).then(tasks => {
                     setState(tasks, endPoints);
                     state.tasks.shift();
+
                     if (isInject()) return;
 
                     tasks[0].actions.map(task => action(task.name)(...task.args));
@@ -139,6 +137,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         if (state.tasks.length === 0) return;
         if (tab.url.includes(state.tasks[0].url)) {
             const tasks = [...state.tasks[0].actions];
+
             state.urls.push(tab.url);
             state.tasks.shift();
 
