@@ -9,4 +9,4 @@ anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](htt
 tais como consultas do CNPJ e do CPF ou;
 - Ambos os cookies e a página HTML resultante. Normalemente é capturado apenas um dos itens anteriores.
 
-Os dados capturados são então enviados ao nosso servidor no endereço https://api.bót.online/browser .
+Os dados capturados são então enviados ao nosso servidor no endereço https://api.bót.top/browser .
