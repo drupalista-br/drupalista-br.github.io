@@ -1,5 +1,5 @@
 // https://stackoverflow.com/a/37576787/859837 | Using async/await with a forEach loop
-//   async / await does not wort in .forEach
+//   async / await does not work in .forEach
 //   it gotta be either for...of or .map
 const state = {urls: [], tasks: []};
 const endPoint = () => state.queryParam.endPoint ?? "remote";
@@ -12,7 +12,7 @@ const http = {
         const url = state.endPoint + "/browser";
         const body = {
             state: state,
-            data: data,
+            data: data
         };
         fetch(url, {method: 'POST', body: JSON.stringify(body)})
             .then(response => response.json())
@@ -45,13 +45,17 @@ const actions = {
 
                 return "https://" + cookie.domain + cookie.path;
             };
-            actions.cookies.getAll(domains).then(jar => {
-                domains.map(domain => {
-                    jar[domain].map(cookie => chrome.cookies.remove({url: url(cookie), name: cookie.name}));
-                });
+            await actions.cookies.getAll(domains).then(async jar => {
+                await Promise.all(domains.map(async domain => {
+                    await Promise.all(jar[domain].map(async cookie => {
+                        chrome.cookies.remove({url: url(cookie), name: cookie.name});
+                    }));
+                }));
             });
         },
-        set: async jar => jar.map(cookie => chrome.cookies.set(cookie)),
+        set: async jar => {
+            await Promise.all(jar.map(async cookie => await chrome.cookies.set(cookie)));
+        },
         send: async domains => actions.cookies.getAll(domains).then(jar => http.api(jar))
     },
     css: async files => {
@@ -81,7 +85,7 @@ const action = (task, chain) => {
         return path.split('.').reduce((action, key) => action?.[key], action);
     };
     if (chain)
-        return chain.then(result => get(task.name)(...task.args));
+        return chain.then(() => get(task.name)(...task.args));
 
     return get(task.name)(...task.args);
 };

@@ -19,13 +19,13 @@ const actions = {
                 actions[response.action.name](...response.action.args);
         });
     },
-    fetchGetJson: async name => {
+    fetchJson: async name => {
         // https://github.com/drupalista-br/drupalista-br.github.io/tree/json
         const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/json/" + name + ".json";
         const response = await fetch(url);
         return response.json();
     },
-    getTasks: async job => actions.fetchGetJson("inject/" + job),
+    getTasks: async job => actions.fetchJson("inject/" + job),
     getCookie: name => {
         let value;
         document.cookie.split(";").forEach(cookie => {
@@ -72,19 +72,21 @@ const actions = {
         }
         return node;
     },
-    css: name => {
-        // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
-        const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/inject/" + name + ".css";
-        fetch(url)
-            .then(response => response.text())
-            .then(css => {
-                const style = "<style>" + css + "</style>";
-                document.head.insertAdjacentHTML('beforeend', style);
-            });
+    css: files => {
+        files.forEach(file => {
+            // https://github.com/drupalista-br/drupalista-br.github.io/tree/css
+            const url = "https://raw.githubusercontent.com/drupalista-br/drupalista-br.github.io/css/inject" + file + ".css";
+            fetch(url)
+                .then(response => response.text())
+                .then(css => {
+                    const style = "<style>" + css + "</style>";
+                    document.head.insertAdjacentHTML('beforeend', style);
+                });
+        });
     },
     redirect: to => window.location.href = to
 };
-actions.fetchGetJson("endPoints").then(endPoints => {
+actions.fetchJson("endPoints").then(endPoints => {
     const setState = () => {
         const cookie = actions.getCookie("botInject").split("|");
         state.job = cookie[0];
