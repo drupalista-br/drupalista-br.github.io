@@ -1,4 +1,4 @@
-# [Bót.online](https://bót.online) | Anti-bots
+# [Bót Top](https://bót.top) | Anti-bots
 
 Esta extensão transfere para um humano a tarefa de resolver o desafio
 anti-robô, tais como o [hcaptcha](https://www.hcaptcha.com) e o [recaptcha](https://www.google.com/recaptcha).
