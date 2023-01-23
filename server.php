@@ -1,0 +1,28 @@
+<?php
+$ps = "ps -ef | grep 'jekyll' | grep -v grep";
+$options = ['start', 'kill', 'list'];
+$start = function() {
+    // to specify ports call:
+    // bundle exec jekyll serve --livereload --livereload-port 35729 -P 4000
+    $tmp = sys_get_temp_dir();
+    $server = "cd home && bundle exec jekyll serve --livereload > {$tmp}/jekyll_server.txt 2>&1 &";
+    $build = function(string $folder) : string {
+        return "cd {$folder} && bundle exec jekyll build --watch --incremental > /dev/null 2>&1 &";
+    };
+    foreach(['home', 'contador', 'cliente'] as $folder) {
+        $cmd = $server;
+        if ($folder !== 'home')
+            $cmd = $build($folder);
+
+        shell_exec($cmd);
+    }
+};
+$kill = function() use ($ps) {
+    shell_exec("{$ps} | awk '{print $2}' | xargs kill -9");
+};
+$list = function() use ($ps) {
+    print shell_exec("{$ps} | awk '{print $2,$9,$10,$11,$12}' OFS='\t'");
+};
+print_r($options);
+$option = readline('Option: ');
+${$options[$option]}();

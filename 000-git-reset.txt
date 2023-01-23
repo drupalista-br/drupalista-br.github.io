@@ -1,4 +1,0 @@
-git reset --hard <COMMIT>
-git clean -f -d
-git checkout .
-git push -f

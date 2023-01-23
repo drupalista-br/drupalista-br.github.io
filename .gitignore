@@ -1,5 +1,9 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
+# just-the-docs
+include contador/.gitignore
+include cliente/.gitignore
+#include nfse/.gitignore
+
+# this is the main / main-dev branchs
+home
+# things that I might need
+zzz

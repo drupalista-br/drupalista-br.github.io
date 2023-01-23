@@ -1,0 +1,44 @@
+home
+===
+  This folder is the the main / main-dev branches. It houses beautiful-jekyll theme.
+
+  Legislação are placed in home.
+
+shortcut to just-the-docs folders
+===
+  cd home
+  sudo mount --bind ../FOLDER_ORIGINAL/_site FOLDER_LINK // FOLDER_LINK gotta exist before running this command.
+
+
+Rollback to a previous commit
+===
+  git reset --hard <COMMIT>
+  git clean -f -d
+  git checkout .
+  git push -f
+
+
+Jekyll instaltion on ubuntu
+===
+
+  Removed everything:
+  ====
+  
+  sudo apt remove --purge ruby
+  sudo apt remove --purge ruby*
+  sudo apt autoremove
+  
+  Re-Instalation:
+  ======
+  
+  sudo apt-add-repository -y ppa:deadsnakes/ppa # ubuntu 18 by default was installing ruby 2.5.8 and jekyll was having issues with that
+  sudo apt install -y ruby2.7 
+  sudo apt install -y ruby2.7-dev
+  sudo gem update --system
+  sudo gem install jekyll
+  
+  cd <website_root_folder>
+  sudo bundle install
+  sudo bundle add <plugin> # gotta do this for each plugin listed in _config.yml
+  bundle exec jekyll serve --livereload # see server.php
+
