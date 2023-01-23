@@ -1,0 +1,6 @@
+#perfilAcesso {
+  display: block !important;
+}
+#barra-brasil, #cabecalho, #conteudo {
+  display: none;
+}

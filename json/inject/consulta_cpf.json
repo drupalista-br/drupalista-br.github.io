@@ -1,0 +1,27 @@
+[
+    {
+        "url": "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/consultapublica.asp?cpf",
+        "action": {
+            "name": "nodeObserve",
+            "args": [
+                {
+                    "datasetHolder": "hcaptchaResponse",
+                    "selector": "iframe[data-hcaptcha-response = '']",
+                    "options": {"attributeOldValue": true}
+                },
+                {
+                    "name": "formSubmit",
+                    "addArg": "push",
+                    "args": [{"id": "theForm"}]
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://servicos.receita.fazenda.gov.br/servicos/cpf/consultasituacao/ConsultaPublicaExibir.asp",
+        "action": {
+            "name": "nodeGet",
+            "args": ["#mainComp", {"name": "send", "addArg": "push", "args": []}]
+        }
+    }
+]

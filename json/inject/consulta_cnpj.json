@@ -1,0 +1,45 @@
+[
+    {
+        "url": "https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp?cnpj=",
+        "action": {
+            "name": "nodeObserve",
+            "args": [
+                {
+                    "datasetHolder": "hcaptchaResponse",
+                    "selector": "iframe[data-hcaptcha-response = '']",
+                    "options": {"attributeOldValue": true}
+                },
+                {
+                    "name": "formSubmit",
+                    "addArg": "push",
+                    "args": [{"id": "frmConsulta"}]
+                }
+            ]
+        }
+    },
+    {
+        "url": "https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Comprovante.asp",
+        "action": {
+            "name": "nodeGet",
+            "args": ["#principal", {
+                "name": "send",
+                "addArg": "unshift",
+                "args": [{
+                    "name": "redirect",
+                    "args": ["https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_qsa.asp"]
+                }]
+            }]
+        }
+    },
+    {
+        "url": "https://servicos.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_qsa.asp",
+        "action": {
+            "name": "nodeGet",
+            "args": ["#principal", {
+                "name": "send",
+                "addArg": "push",
+                "args": []
+            }]
+        }
+    }
+]

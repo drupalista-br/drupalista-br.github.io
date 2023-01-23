@@ -1,0 +1,16 @@
+[
+    {
+        "url": "https://cav.receita.fazenda.gov.br/ecac/?alternar&botInject&",
+        "action": {
+            "name": "callMany",
+            "args": [{"css": ["ecac_alternar", "ecac_alternar_pj"]}, {"formFillUp": [{}]}]
+        }
+    },
+    {
+        "url": "https://cav.receita.fazenda.gov.br/ecac",
+        "action": {
+            "name": "cookiesGetAllSend",
+            "args": [["receita.fazenda.gov.br"]]
+        }
+    }
+]

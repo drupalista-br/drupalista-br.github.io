@@ -1,0 +1,16 @@
+[
+    {
+        "url": "chrome://newtab/",
+        "action": {
+            "name": "callMany",
+            "args": [[
+                {"name": "cookiesEat", "args": [["receita.fazenda.gov.br"]]},
+                {"name": "cookiesSet", "args": []},
+                {"name": "restart", "args": [
+                    ["Alternar Para"],
+                    "https://cav.receita.fazenda.gov.br/ecac/?alternar&botInject&"
+                ]}
+            ]]
+        }
+    }
+]

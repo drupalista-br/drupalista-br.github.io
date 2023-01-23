@@ -1,0 +1,17 @@
+[
+    {
+        "url": "chrome://newtab/",
+        "actions": [
+            {"name": "cookies.deleteAll", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]},
+            {"name": "redirect", "args": ["https://cav.receita.fazenda.gov.br/autenticacao/login"]}
+        ]
+    },
+    {
+        "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
+        "actions": [{"name": "css", "args": [["ecac_login"]]}]
+    },
+    {
+        "url": "https://sso.acesso.gov.br/login?client_id=cav.receita.fazenda.gov.br&authorization_id=",
+        "actions": [{"name": "cookies.send", "args": [["receita.fazenda.gov.br", "acesso.gov.br"]]}]
+    }
+]
