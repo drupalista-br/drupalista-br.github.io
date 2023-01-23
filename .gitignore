@@ -1,9 +1,10 @@
+# beautiful-jekyll
+include home/.gitignore
+
 # just-the-docs
 include contador/.gitignore
 include cliente/.gitignore
 #include nfse/.gitignore
 
-# this is the main / main-dev branchs
-home
 # things that I might need
 zzz
