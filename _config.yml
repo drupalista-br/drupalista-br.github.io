@@ -20,11 +20,12 @@ author: Francisco Luz
 ###############################################
 
 navbar-links:
-  About Me: "aboutme"
-  Resources:
-    - Beautiful Jekyll: "https://beautifuljekyll.com"
-    - Learn markdown: "https://www.markdowntutorial.com/"
-  Author's home: "https://deanattali.com"
+  Serviços: "aboutme"
+  Interfaces:
+    - Do Contador: "contador"
+    - Do Cliente: "cliente"
+  Blog: "blog"
+  Contato: "contato"
 
 ################
 # --- Logo --- #
@@ -51,11 +52,11 @@ round-avatar: true
 social-network-links:
   email: "sac@bót.top"
   rss: true  # remove this line if you don't want to show an RSS link at the bottom
-  facebook: deanattali
-  github: daattali
+  facebook: franciscoluzx
+  github: drupalista-br
 #  twitter: daattali
 #  patreon: DeanAttali
-  youtube: c/daattali
+#  youtube: c/daattali
 #  medium: yourname
 #  reddit: yourname
 #  linkedin: daattali

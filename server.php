@@ -1,13 +1,15 @@
+#!/usr/bin/env php
 <?php
 $ps = "ps -ef | grep 'jekyll' | grep -v grep";
 $options = ['start', 'kill', 'list', 'restart'];
 $start = function() {
     // to specify ports call:
     // bundle exec jekyll serve --livereload --livereload-port 35729 -P 4000
+    $root = __DIR__;
     $tmp = sys_get_temp_dir();
-    $server = "bundle exec jekyll serve --livereload > {$tmp}/jekyll_server.txt 2>&1 &";
-    $build = function(string $folder) : string {
-        return "cd documentacao/{$folder} && bundle exec jekyll build --watch --incremental > /dev/null 2>&1 &";
+    $server = "cd {$root} && bundle exec jekyll serve --livereload > {$tmp}/jekyll_server.txt 2>&1 &";
+    $build = function(string $folder) use ($root) : string {
+        return "cd {$root}/documentacao/{$folder} && bundle exec jekyll build --watch --incremental > /dev/null 2>&1 &";
     };
     foreach(['home', 'contador', 'cliente'] as $folder) {
         $cmd = $server;
