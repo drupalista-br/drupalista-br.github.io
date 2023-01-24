@@ -1,6 +1,6 @@
 <?php
 $ps = "ps -ef | grep 'jekyll' | grep -v grep";
-$options = ['start', 'kill', 'list'];
+$options = ['start', 'kill', 'list', 'restart'];
 $start = function() {
     // to specify ports call:
     // bundle exec jekyll serve --livereload --livereload-port 35729 -P 4000
@@ -23,6 +23,12 @@ $kill = function() use ($ps) {
 $list = function() use ($ps) {
     print shell_exec("{$ps} | awk '{print $2,$9,$10,$11,$12}' OFS='\t'");
 };
+$restart = function() use ($kill, $start) {
+    $kill();
+    $start();
+};
 print_r($options);
-$option = readline('Option: ');
-${$options[$option]}();
+if (!isset($argv[1]))
+    $argv[1] = readline('Option: ');
+
+${$options[$argv[1]]}();
