@@ -1,3 +1,5 @@
+include documentacao/contador/.gitignore
+include documentacao/cliente/.gitignore
 # project
 _site
 .sass-cache
