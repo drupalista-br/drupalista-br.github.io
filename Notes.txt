@@ -1,13 +1,6 @@
 home
 ===
-  This folder is the the main / main-dev branches. It houses beautiful-jekyll theme.
-
   Legislação are placed in home.
-
-shortcut to just-the-docs folders
-===
-  cd home
-  sudo mount --bind ../FOLDER_ORIGINAL/_site FOLDER_LINK // FOLDER_LINK gotta exist before running this command.
 
 
 Rollback to a previous commit

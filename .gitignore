@@ -1,10 +1,13 @@
-# beautiful-jekyll
-include home/.gitignore
+# project
+_site
+.sass-cache
+.vagrant
 
-# just-the-docs
-include contador/.gitignore
-include cliente/.gitignore
-#include nfse/.gitignore
+# general
+.DS_Store
+Thumbs.db
+ehthumbs.db
 
-# things that I might need
-zzz
+Gemfile.lock
+
+beautiful-jekyll-theme-*.gem

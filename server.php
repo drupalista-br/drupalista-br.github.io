@@ -5,9 +5,9 @@ $start = function() {
     // to specify ports call:
     // bundle exec jekyll serve --livereload --livereload-port 35729 -P 4000
     $tmp = sys_get_temp_dir();
-    $server = "cd home && bundle exec jekyll serve --livereload > {$tmp}/jekyll_server.txt 2>&1 &";
+    $server = "bundle exec jekyll serve --livereload > {$tmp}/jekyll_server.txt 2>&1 &";
     $build = function(string $folder) : string {
-        return "cd {$folder} && bundle exec jekyll build --watch --incremental > /dev/null 2>&1 &";
+        return "cd documentacao/{$folder} && bundle exec jekyll build --watch --incremental > /dev/null 2>&1 &";
     };
     foreach(['home', 'contador', 'cliente'] as $folder) {
         $cmd = $server;
