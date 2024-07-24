@@ -1,0 +1,20 @@
+site_name: Bót | Escrita Fiscal Terceirizada
+nav:
+  - Home: index.md
+  - About:
+    - Testa: about.md
+    - Test: test.md
+theme:
+  name: material
+  logo: img/logo.png
+  favicon: img/logo.png
+  language: pt-BR
+  palette:
+    scheme: slate
+    primary: grey
+  features:
+    - navigation.tabs
+    - navigation.footer
+  font:
+    text: Ubuntu
+copyright: Escrita Fiscal Terceirizada | Para contadores e escritórios de contabilidade.
