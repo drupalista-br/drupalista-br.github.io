@@ -1,7 +1,8 @@
 site_name: Bót | Escrita Fiscal Terceirizada
 nav:
   - Instalação: index.md
-  #- O que é: o-que-e.md
+  #- Perguntas/Respostas: perguntas-respostas.md
+  - Contato: contato.md
 theme:
   name: material
   custom_dir: overrides
@@ -18,6 +19,4 @@ theme:
     - content.tooltips
   font:
     text: Lora
-markdown_extensions:
-  - attr_list
-copyright: Escrita Fiscal Terceirizada | Para contadores e escritórios de contabilidade.
+copyright: 'Francisco Luz CNPJ: 36.446.846/0001-05 | <a href="/blog">Blog</a><br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade.'
