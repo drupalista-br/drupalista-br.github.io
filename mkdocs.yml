@@ -18,5 +18,7 @@ theme:
     - navigation.tabs.sticky
     - content.tooltips
   font:
-    text: Lora
-copyright: 'Francisco Luz CNPJ: 36.446.846/0001-05 | <a href="/blog">Blog</a><br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade.'
+    text: Comic Sans
+plugins:
+  - blog
+copyright: '<a href="/blog">Francisco Luz</a> CNPJ: 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade'
