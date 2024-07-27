@@ -1,8 +1,9 @@
-site_name: Bót | Escrita Fiscal Terceirizada
+#site_name: Bót | Escrita Fiscal Terceirizada
+site_name: Bót
 nav:
   - Instalação: index.md
   #- Perguntas/Respostas: perguntas-respostas.md
-  - Contato: contato.md
+  #- Contato: contato.md
 theme:
   name: material
   custom_dir: overrides
@@ -21,4 +22,6 @@ theme:
     text: Comic Sans
 plugins:
   - blog
-copyright: '<a href="/blog">Francisco Luz</a> CNPJ: 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade'
+extra_css:
+  - css.css
+copyright: <a href="/blog" class="a_footer">Bót Terceirizada Eireli</a> CNPJ 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade
