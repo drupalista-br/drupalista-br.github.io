@@ -41,6 +41,7 @@ hide:
         * DAS do simples nacional;
         * DARF do pis, da cofins, do irpj e da csll;
         * Mais detalhes.
+    * Do recálculo de guias atrasadas.
 * Todos os dados/documentos que produzimos são disponibilizados via google drive. Mais detalhes.
 
 ### Como é feita a interação de dados / documentos / relatórios?
@@ -68,7 +69,20 @@ hide:
         1. O certificado do cliente ou o certificado do contador ou os dados de usuário e senha, que estão guardados no servidor da Bót, é usado no processo de login;
         1. Após logado ao serviço, o servidor da Bót devolve a sessão (os cookies) para o proxy e voilá, o firefox do usuário estará logado ao serviço.
             1. O usuário do painel precisará resolver o captcha caso o serviço imponha essa exigência.
-    1. Validação das credenciais do usuário do painel junto ao google drive, para certificar que o usuário está autorizado a acessar o google drive do contador/escritório.
+    1. Validação das credenciais junto ao google drive, para certificar que o usuário do painel está autorizado a acessar o google drive do contador/escritório.
 
 ### Como contratar a Bót?
+* Basta instalar o painel do usuário e, caso o CPF/CNPJ do contador informado, NÃO esteja cadastrado:
+    1. Você será direcionado para a página de consulta do CNPJ da receita federal para extraírmos os dados cadastrais da sua empresa de contabilidade ou;
+        1. Se tiver informado um CPF, você será apresentado um formulário para informar os dados do contador.
+    1. TODO.
 #### Quanto custa os serviços da Bót?
+#### Há cobrança de taxa de adesão? Taxa de cancelamento?
+* Não. Só cobramos a mensalidade mensal acordada.
+#### Há cobrança de mensalidade 13o?
+* Não.
+### Como cadastrar um novo cliente?
+#### Como remover(desativar) um cliente para a Bót parar de executar os serviços mensais/anuais?
+#### Foi feito alteração cadastral do cliente, como informo/atualizo a Bót?
+#### Como transferir um cliente para outro contador/escritório?
+### Como pedir o recálculo de uma guia de imposto atrasada?

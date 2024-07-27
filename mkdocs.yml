@@ -24,4 +24,4 @@ plugins:
   - blog
 extra_css:
   - css.css
-copyright: <a href="/blog" class="a_footer">Bót Terceirizada Eireli</a> CNPJ 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade
+#copyright: <a href="/blog" class="a_footer">Bót Terceirizada Eireli</a> CNPJ 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade
