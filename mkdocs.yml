@@ -24,4 +24,9 @@ plugins:
   - blog
 extra_css:
   - css.css
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 #copyright: <a href="/blog" class="a_footer">Bót Terceirizada Eireli</a> CNPJ 36.446.846/0001-05<br/>Escrita Fiscal Terceirizada - Para contadores e escritórios de contabilidade
