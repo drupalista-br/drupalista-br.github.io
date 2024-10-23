@@ -76,7 +76,7 @@ hide:
 * Não. Só cobramos a mensalidade mensal acordada.
 
 #### Há cobrança de mensalidade 13o?
-* Não.
+* Não. Somente a mensalidade acordada.
 
 #### A Bót presta serviços diretamente ao cliente / empresário?
 * Não. Somente para contadores e escritórios de contabilidade.
