@@ -1,0 +1,12 @@
+/*
+!.gitignore
+!hugo.yaml
+!README.md
+!layouts/
+layouts/*
+!layouts/partials/
+!assets/
+assets/*
+!assets/icons/
+!assets/images/
+
