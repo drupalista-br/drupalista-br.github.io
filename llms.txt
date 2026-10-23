@@ -1,0 +1,14 @@
+# escritorio.tec.br
+
+> Nós cuidamos das obrigações periódicas &mdash; você cuida do seu cliente!
+
+## Site index
+
+- [Home page](https://escritorio.tec.br/index.md)
+- [Instalação](https://escritorio.tec.br/docs/index.md)
+- [Serviços](https://escritorio.tec.br/servicos/index.md)
+- [Blog](https://escritorio.tec.br/blog/index.md)
+
+## Site locales
+
+- [](https://escritorio.tec.br/index.md)
