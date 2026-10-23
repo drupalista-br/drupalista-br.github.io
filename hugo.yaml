@@ -7,6 +7,7 @@ title: escritorio.tec.br
 # contentDir: content/en
 defaultContentLanguage: pt-br
 defaultContentLanguageInSubdir: false
+locale: pt-BR
 # Useful when translating.
 enableMissingTranslationPlaceholders: true
 
@@ -83,8 +84,9 @@ markup:
 
 # Comment out if you don't want the "print entire section" link enabled.
 outputs:
-  home: [HTML, print, RSS, redirects]
-  section: [HTML, print, RSS]
+  home: [HTML, markdown, print, RSS, redirects, LLMS]
+  page: [HTML, markdown]
+  section: [HTML, print, RSS, markdown]
 
 params:
   taxonomy:
@@ -114,7 +116,7 @@ params:
   # The version number for the version of the docs represented in this doc set.
   # Used in the "version-banner" partial to display a version number for the
   # current doc set.
-  version: 0.17.0
+  version: 0.18.0
 
   # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
   # github_repo: https://github.com/google/docsy-example
