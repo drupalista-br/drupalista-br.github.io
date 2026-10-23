@@ -2,6 +2,7 @@
 !.gitignore
 !hugo.yaml
 !README.md
+!static/
 !layouts/
 layouts/*
 !layouts/partials/
@@ -9,4 +10,4 @@ layouts/*
 assets/*
 !assets/icons/
 !assets/images/
-
+!i18n/
