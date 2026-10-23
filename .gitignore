@@ -10,4 +10,5 @@ layouts/*
 assets/*
 !assets/icons/
 !assets/images/
+!assets/not-in-use/
 !i18n/
