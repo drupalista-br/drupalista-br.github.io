@@ -1,12 +1,12 @@
 ---
 title: escritorio.tec.br
-description: Nós cuidamos das obrigações periódicas &mdash; você cuida do seu cliente!
+description: ...
 params:
   body_class: td-navbar-links-all-active
 ---
 
 {{% blocks/cover
-  title="Software e Serviços para Escritórios Contábeis"
+  title="Em construção."
   height="full td-below-navbar"
   image_anchor="top"
 %}}
@@ -21,17 +21,6 @@ params:
 {{% _param description %}}
 {.display-6}
 
-<!-- prettier-ignore -->
-<div class="td-cta-buttons my-5">
-  <a {{% _param btn-lg primary %}} href="servicos/">
-    Serviços
-    {{% _param FA solid briefcase "" %}}
-  </a>
-  <a {{% _param btn-lg secondary %}}
-    href="docs/"
-    target="_blank" rel="noopener noreferrer">
-    Instalação
-    {{% _param FA solid download "" %}}
-  </a>
-</div>
+
 {{% /blocks/cover %}}
+
