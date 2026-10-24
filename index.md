@@ -1,6 +1,6 @@
 # escritorio.tec.br
 
-> Nós cuidamos das obrigações periódicas &mdash; você cuida do seu cliente!
+> ...
 
 ---
 
@@ -8,15 +8,15 @@ LLMS index: [llms.txt](/llms.txt)
 
 ---
 
-<link rel="preload" as="image" href="/featured-background_hu_e87c40bd7695bfe9.jpg" media="(max-width: 1200px)">
-<link rel="preload" as="image" href="/featured-background_hu_790ad7f5217436b1.jpg" media="(min-width: 1200px)">
+<link rel="preload" as="image" href="/featured-background_hu_ce42f86bb5e934bd.jpg" media="(max-width: 1200px)">
+<link rel="preload" as="image" href="/featured-background_hu_3533882f4f3188f7.jpg" media="(min-width: 1200px)">
 <style>
 #td-cover-block-0 {
-  background-image: url(/featured-background_hu_e87c40bd7695bfe9.jpg);
+  background-image: url(/featured-background_hu_ce42f86bb5e934bd.jpg);
 }
 @media only screen and (min-width: 1200px) {
   #td-cover-block-0 {
-    background-image: url(/featured-background_hu_790ad7f5217436b1.jpg);
+    background-image: url(/featured-background_hu_3533882f4f3188f7.jpg);
   }
 }
 </style>
@@ -24,7 +24,7 @@ LLMS index: [llms.txt](/llms.txt)
   <div class="col-12">
     <div class="container td-overlay__inner">
       <div class="text-center">
-        <h1 class="display-1 mt-0 mt-md-5 pb-4">Software e Serviços para Escritórios Contábeis</h1>
+        <h1 class="display-1 mt-0 mt-md-5 pb-4">Em construção.</h1>
         <div class="pt-3 lead">
           
 
@@ -35,22 +35,10 @@ LLMS index: [llms.txt](/llms.txt)
 -->
 
 <!-- prettier-ignore -->
-Nós cuidamos das obrigações periódicas &mdash; você cuida do seu cliente!
+...
 {.display-6}
 
-<!-- prettier-ignore -->
-<div class="td-cta-buttons my-5">
-  <a class="btn btn-lg btn-primary" role="button" href="servicos/">
-    Serviços
-    <i class="fa-solid fa-briefcase text- px-1"></i>
-  </a>
-  <a class="btn btn-lg btn-secondary" role="button"
-    href="docs/"
-    target="_blank" rel="noopener noreferrer">
-    Instalação
-    <i class="fa-solid fa-download text- px-1"></i>
-  </a>
-</div>
+
 </div>
       </div>
     </div>
