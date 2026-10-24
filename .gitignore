@@ -4,8 +4,6 @@
 !README.md
 !static/
 !layouts/
-layouts/*
-!layouts/partials/
 !assets/
 assets/*
 !assets/icons/
