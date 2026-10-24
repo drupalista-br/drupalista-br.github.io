@@ -1,10 +1,16 @@
 bun run local serve
 
-### Build public
-* bun run clean
-* bun run build:production
+** Build public **
+```
+bun run clean
+bun run build:production
+```
 
-### Menu
+** Shortcodes **
+[Docs](https://www.docsy.dev/docs/content/shortcodes/)
+
+** Menu **
+```
 ---
 description: Example on how to set a menu item in the header menu
 menu:
@@ -12,9 +18,10 @@ menu:
     name: "Menu Title"
     weight: 30
 ---
+```
 
-### Debugging
-
+** Debugging **
+```
 In `../docsy/theme/layouts/all.html` add `<p>` tags. For example:
 {{ define "main" -}}
 <p>ALL.HTML SELECTED: {{ .RelPermalink }}</p>
@@ -22,4 +29,4 @@ In `../docsy/theme/layouts/all.html` add `<p>` tags. For example:
 <p>Kind: {{ .Kind }}</p>
 {{ .Content -}}
 {{ end }}
-
+```

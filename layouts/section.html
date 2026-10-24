@@ -26,8 +26,9 @@
         <div class="row flex-xl-nowrap">
           <aside class="col-12 col-md-3 col-xl-2 td-sidebar-toc">
             {{ partial "page-meta-links.html" . }}
+            {{ partial "toc.html" . }}
           </aside>
-          <main class="col-12 col-md-9 col-xl-10 ps-md-5" role="main">
+          <main class="col-12 col-md-9 col-xl-10 ps-md-5 escritorio-tec-br-td-full-width" role="main">
             {{ .Render "_td-content" }}
           </main>
         </div>
