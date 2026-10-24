@@ -7,7 +7,9 @@
 - [Home page](https://escritorio.tec.br/index.md)
 - [Instalação](https://escritorio.tec.br/docs/index.md)
 - [Serviços](https://escritorio.tec.br/servicos/index.md)
+- [Suporte](https://escritorio.tec.br/suporte/index.md)
 - [Blog](https://escritorio.tec.br/blog/index.md)
+- [Contato](https://escritorio.tec.br/contato/index.md)
 
 ## Site locales
 

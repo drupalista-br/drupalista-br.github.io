@@ -63,7 +63,9 @@ Nós cuidamos das obrigações periódicas &mdash; você cuida do seu cliente!
 Section pages:
 
 - [Blog](/blog/)
+- [Contato](/contato/)
 - [Instalação](/docs/)
 - [Resultados retornados](/search/)
 - [Serviços](/servicos/)
+- [Manual do usuário](/suporte/)
 - [Website information](/site/): Information about the website.
