@@ -1,15 +1,15 @@
 bun run local serve
 
-** Build public **
+## Build public
 ```
 bun run clean
 bun run build:production
 ```
 
-** Shortcodes **
+## Shortcodes
 [Docs](https://www.docsy.dev/docs/content/shortcodes/)
 
-** Menu **
+## Menu
 ```
 ---
 description: Example on how to set a menu item in the header menu
@@ -20,7 +20,7 @@ menu:
 ---
 ```
 
-** Debugging **
+## Debugging
 ```
 In `../docsy/theme/layouts/all.html` add `<p>` tags. For example:
 {{ define "main" -}}

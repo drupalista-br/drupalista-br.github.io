@@ -10,3 +10,5 @@ assets/*
 !assets/images/
 !assets/not-in-use/
 !i18n/
+!content/
+
