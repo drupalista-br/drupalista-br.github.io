@@ -20,7 +20,5 @@ params:
 <!-- prettier-ignore -->
 {{% _param description %}}
 {.display-6}
-
-
 {{% /blocks/cover %}}
 
