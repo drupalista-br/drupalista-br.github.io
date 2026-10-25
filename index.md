@@ -37,8 +37,6 @@ LLMS index: [llms.txt](/llms.txt)
 <!-- prettier-ignore -->
 ...
 {.display-6}
-
-
 </div>
       </div>
     </div>
@@ -52,7 +50,7 @@ Section pages:
 
 - [Blog](/blog/)
 - [Contato](/contato/)
-- [Instalação](/docs/)
+- [Instalação](/instalacao/)
 - [Resultados retornados](/search/)
 - [Serviços](/servicos/)
 - [Manual do usuário](/suporte/)

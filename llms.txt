@@ -5,7 +5,7 @@
 ## Site index
 
 - [Home page](https://escritorio.tec.br/index.md)
-- [Instalação](https://escritorio.tec.br/docs/index.md)
+- [Instalação](https://escritorio.tec.br/instalacao/index.md)
 - [Serviços](https://escritorio.tec.br/servicos/index.md)
 - [Suporte](https://escritorio.tec.br/suporte/index.md)
 - [Blog](https://escritorio.tec.br/blog/index.md)
