@@ -4,7 +4,8 @@ linkTitle: Instalação
 menu:
   main:
     weight: 20
-    identifier: instalação
+    identifier: instalacao
+type: docs
 notoc: true
 ---
 
