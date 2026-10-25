@@ -1,4 +1,11 @@
-bun run local serve
+`bun run local serve`
+
+## Repos
+1. `master` contains the most up to date content and drafts;
+2. `master-public` contains the published content;
+* The content in `public` repo is built from here.
+3. `public` github pages content.
+* The content origines from the `/public/` folder after doing the `Build public` actions.
 
 ## Build public
 ```

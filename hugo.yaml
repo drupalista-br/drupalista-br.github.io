@@ -1,5 +1,5 @@
 baseURL: https://escritorio.tec.br
-title: escritorio.tec.br
+title: &nome_fantasia "escritorio.tec.br"
 
 # cSpell:ignore goldmark github hugo readingtime docsy subdir lastmod pygments linenos catmullrom norsk gu slugorcontentbasename
 
@@ -22,7 +22,7 @@ enableGitInfo: true
 # You can add your own taxonomies
 taxonomies:
   tag: tags
-  category: categories
+  category: categorias
 
 # Highlighting config
 pygmentsCodeFences: true
@@ -89,15 +89,20 @@ outputs:
   section: [HTML, print, RSS, markdown]
 
 params:
+  razao_social: &razao_social "Escritório Tecnologia Ltda"
+  nome_fantasia: *nome_fantasia
+  cnpj_no_mask: &cnpj_no_mask "36446846000105"
+  cnpj_with_mask: &cnpj_with_mask "36.446.846/0001-05"
+  moto: &moto "Software e Serviços para Escritórios Contábeis"
   taxonomy:
     # set taxonomyCloud = [] to hide taxonomy clouds
-    taxonomyCloud: [tags, categories]
+    taxonomyCloud: [tags, categorias]
 
     # If used, must have same length as taxonomyCloud
-    taxonomyCloudTitle: [Tag Cloud, Categories]
+    taxonomyCloudTitle: [Tag Cloud, categorias]
 
     # set taxonomyPageHeader = [] to hide taxonomies on the page headers
-    taxonomyPageHeader: [tags, categories]
+    taxonomyPageHeader: [tags, categorias]
 
   # privacy_policy: https://policies.google.com/privacy
 
@@ -142,9 +147,9 @@ params:
 
   copyright:
     authors: >-
-      Escritório Tecnologia Ltda<br>
-      Cnpj: [36.446.846/0001-05](https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/?cnpj=36446846000105)<br>
-      Software e Serviços para Escritórios Contábeis<br>
+      {{% param razao_social %}}<br>
+      Cnpj: <a href="https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/?cnpj={{% param cnpj_no_mask %}}" target="_blank" rel="noopener">{{% param cnpj_with_mask %}}</a><br>
+      {{% param moto %}}<br>
     from_year: 2020
     # to_year: present
 
