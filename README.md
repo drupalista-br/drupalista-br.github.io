@@ -28,12 +28,10 @@ menu:
 ```
 
 ## Debugging
-```
-In `../docsy/theme/layouts/all.html` add `<p>` tags. For example:
-{{ define "main" -}}
-<p>ALL.HTML SELECTED: {{ .RelPermalink }}</p>
-<p>Title: {{ .Title }}</p>
-<p>Kind: {{ .Kind }}</p>
-{{ .Content -}}
-{{ end }}
-```
+Insert `{{< debug >}}`. It will print `/layouts/shortcodes/debug.html`
+
+## Custom type
+1. Make the folder `/layouts/[TYPE]/`;
+2. `section.html` for section kind and `page.html` for page kind;
+3. `section` is for `_index.md` and `page` for `index.md`.
+
