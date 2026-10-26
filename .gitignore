@@ -11,4 +11,5 @@ assets/*
 !assets/not-in-use/
 !i18n/
 !content/
+!data/
 
