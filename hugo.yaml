@@ -60,7 +60,6 @@ params:
   offlineSearch: true
   prism_syntax_highlighting: false
   copyright:
-    authors: ""
     from_year: 2020
   ui:
     breadcrumb_disable: false
