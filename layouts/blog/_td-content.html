@@ -2,7 +2,7 @@
 	<h1>{{ .Title }}</h1>
 	{{ with .Params.description }}<div class="lead">{{ . | markdownify }}</div>{{ end }}
 	<div class="td-byline mb-4">
-		{{ with .Params.author }}{{ T "post_byline_by" }} <b>{{ . | markdownify }}</b> |{{ end}}
+        {{ with .Params.author }}{{ T "post_byline_by" }} <b>{{ with index (hugo.Data.authors | default dict) . }}<a href="{{ .url }}" target="_blank" rel="noopener">{{ .name }}</a>{{ else }}{{ . | markdownify }}{{ end }}</b> |{{ end }}
 		<time datetime="{{ $.Date.Format "2006-01-02" }}" class="text-body-secondary">{{ $.Date | time.Format ":date_full" }}</time>
 	</div>
 	<header class="article-meta">

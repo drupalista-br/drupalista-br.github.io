@@ -1,5 +1,5 @@
 baseURL: https://escritorio.tec.br
-title: &nome_fantasia "escritorio.tec.br"
+title: "escritorio.tec.br"
 defaultContentLanguage: pt-br
 defaultContentLanguageInSubdir: false
 locale: pt-BR
@@ -48,11 +48,6 @@ outputs:
   section: [HTML, print, RSS, markdown]
 
 params:
-  razao_social: &razao_social "Escritório Tecnologia Ltda"
-  nome_fantasia: *nome_fantasia
-  cnpj_no_mask: &cnpj_no_mask "36446846000105"
-  cnpj_with_mask: &cnpj_with_mask "36.446.846/0001-05"
-  moto: &moto "Em construção."
   taxonomy:
     taxonomyCloud: [tags, categorias]
     taxonomyCloudTitle: [Tag Cloud, categorias]
@@ -65,10 +60,7 @@ params:
   offlineSearch: true
   prism_syntax_highlighting: false
   copyright:
-    authors: >-
-      {{% param razao_social %}}<br>
-      Cnpj: <a href="https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/?cnpj={{% param cnpj_no_mask %}}" target="_blank" rel="noopener">{{% param cnpj_with_mask %}}</a><br>
-      {{% param moto %}}<br>
+    authors: ""
     from_year: 2020
   ui:
     breadcrumb_disable: false
