@@ -141,10 +141,7 @@ params:
   prism_syntax_highlighting: false
 
   copyright:
-    authors: >-
-      {{% param razao_social %}}<br>
-      Cnpj: <a href="https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/?cnpj={{% param cnpj_no_mask %}}" target="_blank" rel="noopener">{{% param cnpj_with_mask %}}</a><br>
-      {{% param moto %}}<br>
+    authors: ""
     from_year: 2020
     # to_year: present
 
