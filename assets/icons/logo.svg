@@ -1,5 +1,5 @@
 <svg id="Layer_1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 720 620" style="enable-background:new 0 0 720 620">
-  <title>Software e Serviços para Escritórios Contábeis</title>
+  <title>{{- hugo.Data.company.moto -}}</title>
   <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M 108 36
 H 614
 C 646 36 672 62 672 94
