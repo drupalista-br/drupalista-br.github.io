@@ -89,4 +89,14 @@ module:
   imports:
     - path: github.com/google/docsy/theme
       disable: false
+  mounts:
+    - source: ../master/layouts
+      target: layouts
+    - source: ../master/i18n
+      target: i18n
+    - source: ../master/static
+      target: static
+    - source: ../master/assets
+      target: assets
+
 

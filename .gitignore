@@ -2,14 +2,6 @@
 !.gitignore
 !hugo.yaml
 !README.md
-!static/
-!layouts/
-!assets/
-assets/*
-!assets/icons/
-!assets/images/
-!assets/not-in-use/
-!i18n/
 !content/
 !data/
 
