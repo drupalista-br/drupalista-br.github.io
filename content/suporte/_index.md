@@ -5,6 +5,7 @@ menu:
   main:
     weight: 20
     identifier: suporte
+    pre: '<i class="fa-solid fa-circle-info"></i>'
 notoc: true
 type: docs
 cascade:

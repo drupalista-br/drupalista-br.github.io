@@ -4,6 +4,7 @@ menu:
   main:
     weight: 0
     identifier: contato
+    pre: '<i class="fa-brands fa-whatsapp"></i>'
 ---
 
 Em construção.
