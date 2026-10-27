@@ -6,7 +6,7 @@ params:
 ---
 
 {{% blocks/cover
-  title="Software e Serviços para Escritórios Contábeis"
+  title="data:company.moto"
   height="full td-below-navbar"
   image_anchor="top"
 %}}

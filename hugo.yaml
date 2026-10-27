@@ -1,5 +1,5 @@
 baseURL: https://escritorio.tec.br
-title: "escritorio.tec.br"
+# title: "escritorio.tec.br"
 
 # cSpell:ignore goldmark github hugo readingtime docsy subdir lastmod pygments linenos catmullrom norsk gu slugorcontentbasename
 
@@ -143,7 +143,7 @@ params:
   copyright:
     authors: ""
     from_year: 2020
-    # to_year: present
+    to_year: "<script>new Date().getFullYear()</script>"
 
   # User interface configuration
   ui:
@@ -190,7 +190,7 @@ params:
 
   links:
     # End user relevant links. These will show up on left side of footer and in the community page if you have one.
-    # user:
+    #user:
     #  - name: User mailing list
     #    url: https://example.org/mail
     #    icon: fa fa-envelope
