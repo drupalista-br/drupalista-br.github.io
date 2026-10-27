@@ -6,7 +6,7 @@ params:
 ---
 
 {{% blocks/cover
-  title="Em construção."
+  title="data:company.moto"
   height="full td-below-navbar"
   image_anchor="top"
 %}}

@@ -1,5 +1,4 @@
 baseURL: https://escritorio.tec.br
-title: "escritorio.tec.br"
 defaultContentLanguage: pt-br
 defaultContentLanguageInSubdir: false
 locale: pt-BR
@@ -74,6 +73,14 @@ params:
   mainBranchPreviewURL: https://main--goldydocs.netlify.app/
   btn-lg: class="btn btn-lg btn-{1}" role="button"
   FA: <i class="fa-{1} fa-{2} text-{3} px-1"></i>
+  links:
+    developer:
+      - name: Contato
+        url: /contato
+        icon: fa-brands fa-whatsapp
+      - name: Suporte
+        url: /suporte
+        icon: fa fa-circle-info
 
 security:
   funcs: # cspell:disable-line
@@ -88,6 +95,8 @@ module:
   imports:
     - path: github.com/google/docsy/theme
       disable: false
+  # works only folders and files that are part of the hugo ecosystem;
+  # it won't work with docsy specific folder/files.
   mounts:
     - source: ../master/layouts
       target: layouts
@@ -97,5 +106,10 @@ module:
       target: static
     - source: ../master/assets
       target: assets
-
+    - source: content
+      target: content
+    - source: ../master/content/site.md
+      target: content/site.md
+    - source: ../master/content/search.md
+      target: content/search.md
 
