@@ -50,8 +50,8 @@ Section pages:
 
 - [Blog](/blog/)
 - [Contato](/contato/)
+- [Informações do website](/site/): Informações sobre este website.
 - [Instalação](/instalacao/)
 - [Resultados retornados](/search/)
 - [Serviços](/servicos/)
 - [Manual do usuário](/suporte/)
-- [Website information](/site/): Information about the website.

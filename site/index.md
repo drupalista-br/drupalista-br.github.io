@@ -1,6 +1,6 @@
-# Website information
+# Informações do website
 
-> Information about the website.
+> Informações sobre este website.
 
 ---
 
@@ -8,7 +8,7 @@ LLMS index: [llms.txt](/llms.txt)
 
 ---
 
-Site built with [<span class="badge bg-primary text-bg-primary fs-6">Docsy
+Website construído com [<span class="badge bg-primary text-bg-primary fs-6">Docsy
 v0.18.0 </span>][version]
 
 ## Build information
@@ -27,7 +27,7 @@ Deploy context | local
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   var options = { hour: '2-digit', hour12: false, minute: '2-digit', timeZoneName: 'short' };
-  var buildDate = new Date("2026-10-26T01:59:52-04:00");
+  var buildDate = new Date("2026-10-27T19:28:30-04:00");
   document.getElementById("local-time").innerText = buildDate.toLocaleString(undefined, options);
 });
 </script>

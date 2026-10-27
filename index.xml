@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>escritorio.tec.br</title><link>https://escritorio.tec.br/</link><description>Recent content on escritorio.tec.br</description><generator>Hugo</generator><language>pt-BR</language><atom:link href="https://escritorio.tec.br/index.xml" rel="self" type="application/rss+xml"/><item><title>Resultados retornados</title><link>https://escritorio.tec.br/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://escritorio.tec.br/search/</guid><description/></item><item><title>Website information</title><link>https://escritorio.tec.br/site/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://escritorio.tec.br/site/</guid><description>&lt;p&gt;Site built with &lt;a href="https://github.com/google/docsy/releases/v0.18.0"&gt;&lt;span class="badge bg-primary text-bg-primary fs-6"&gt;Docsy
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>escritorio.tec.br on</title><link>https://escritorio.tec.br/</link><description>Recent content in escritorio.tec.br on</description><generator>Hugo</generator><language>pt-BR</language><atom:link href="https://escritorio.tec.br/index.xml" rel="self" type="application/rss+xml"/><item><title>Informações do website</title><link>https://escritorio.tec.br/site/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://escritorio.tec.br/site/</guid><description>&lt;p&gt;Website construído com &lt;a href="https://github.com/google/docsy/releases/v0.18.0"&gt;&lt;span class="badge bg-primary text-bg-primary fs-6"&gt;Docsy
 v0.18.0 &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id="build-information"&gt;Build information&lt;a class="td-heading-self-link" href="#build-information" aria-label="Heading self-link"&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Netlify build information:&lt;/p&gt;
@@ -23,7 +23,7 @@ v0.18.0 &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;script&gt;
 document.addEventListener("DOMContentLoaded", function() {
  var options = { hour: '2-digit', hour12: false, minute: '2-digit', timeZoneName: 'short' };
- var buildDate = new Date("2026-10-26T01:59:52-04:00");
+ var buildDate = new Date("2026-10-27T19:28:30-04:00");
  document.getElementById("local-time").innerText = buildDate.toLocaleString(undefined, options);
 });
-&lt;/script&gt;</description></item></channel></rss>
+&lt;/script&gt;</description></item><item><title>Resultados retornados</title><link>https://escritorio.tec.br/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://escritorio.tec.br/search/</guid><description/></item></channel></rss>
