@@ -48,7 +48,7 @@ Art. 40-D da Resolução CGSN nº 140/2018.
   - até 31 de maio, para a opção ou renúncia feita em março.
 - A empresa precisará formalizar a opção apenas uma vez.
   - A opção permanecerá vigente enquanto a empresa **não** renunciar ao regime híbrido (§ 1º).
-- Ao optar pelo regime híbrido, quanto à apropriação de créditos de CBS e IBS relativos ao estoque existente no último dia sob o regime puro:
+- Ao optar | Apropriação do crédito da Cbs e do Ibs em estoque no último dia sob o regime puro:
   - **Não há previsão legal.**
 
 ## 3. Produtor rural

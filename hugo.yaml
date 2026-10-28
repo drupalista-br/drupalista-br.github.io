@@ -95,21 +95,4 @@ module:
   imports:
     - path: github.com/google/docsy/theme
       disable: false
-  # works only folders and files that are part of the hugo ecosystem;
-  # it won't work with docsy specific folder/files.
-  mounts:
-    - source: ../master/layouts
-      target: layouts
-    - source: ../master/i18n
-      target: i18n
-    - source: ../master/static
-      target: static
-    - source: ../master/assets
-      target: assets
-    - source: content
-      target: content
-    - source: ../master/content/site.md
-      target: content/site.md
-    - source: ../master/content/search.md
-      target: content/search.md
 

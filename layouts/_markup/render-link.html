@@ -1,0 +1,10 @@
+{{- $dest := .Destination -}}
+{{- $newTab := false -}}
+{{- if strings.HasSuffix $dest "#_blank" -}}
+  {{- $newTab = true -}}
+  {{- $dest = strings.TrimSuffix "#_blank" $dest -}}
+{{- else if strings.HasPrefix $dest "http" -}}
+  {{- $newTab = true -}}
+{{- end -}}
+<a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $newTab }} target="_blank" rel="noopener"{{ end }}>{{ .Text | safeHTML }}</a>
+

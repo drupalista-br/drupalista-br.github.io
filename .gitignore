@@ -3,6 +3,10 @@
 !hugo.yaml
 !docsy.work
 !README.md
+!static/
+!layouts/
+!assets/
+!i18n/
 !content/
 !data/
 

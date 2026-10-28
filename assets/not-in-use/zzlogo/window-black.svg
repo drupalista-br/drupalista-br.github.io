@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="620" viewBox="0 0 720 620">
+  <title>Window code icon</title>
+  <path fill="#000000" fill-rule="evenodd" clip-rule="evenodd" d="M 108 36
+H 614
+C 646 36 672 62 672 94
+V 523
+C 672 555 646 582 614 582
+H 108
+C 76 582 50 555 50 523
+V 94
+C 50 62 76 36 108 36 Z
+M 90 173
+H 632
+V 520
+C 632 532 623 541 611 541
+H 111
+C 99 541 90 532 90 520 Z
+M 433 106
+A 27.5 27.5 0 1 0 378 106
+A 27.5 27.5 0 1 0 433 106 Z
+M 528 106
+A 27.5 27.5 0 1 0 473 106
+A 27.5 27.5 0 1 0 528 106 Z
+M 617 106
+A 27.5 27.5 0 1 0 562 106
+A 27.5 27.5 0 1 0 617 106 Z"/>
+  <g fill="none" stroke="#000000" stroke-width="52" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 251 307 L 176 367 L 251 429"/>
+    <path d="M 402 252 L 319 478"/>
+    <path d="M 476 301 L 552 366 L 476 430"/>
+  </g>
+</svg>
