@@ -31,6 +31,10 @@ menu:
 ---
 ```
 
+## Markdown
+1. Add `#_blank` to the end of the internal link for opening it in a new tab;
+
+
 ## Debugging
 Insert `{{< debug >}}`. It will print `/layouts/shortcodes/debug.html`
 
