@@ -3,7 +3,7 @@ title: "WhatsApp | Como transformar uma conversa em Pdf"
 date: 2026-10-28
 author: '[Francisco Luz](/contato/#fundador-e-ceo#_blank)'
 description: >
-  Printar longas conversas, colocá-las em órdem cronológica e transformá-las em um documento único, legível e pesquisável, pode ser alcançado com dois passos simples.
+  Printar longas conversas, colocá-las em ordem cronológica e transformá-las em um documento único, legível e pesquisável, pode ser alcançado com dois passos simples.
 categorias: ["Tutoriais", "Dicas"]
 ---
 
