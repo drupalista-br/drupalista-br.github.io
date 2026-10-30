@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tutoriais on</title><link>https://escritorio.tec.br/categorias/tutoriais/</link><description>Recent content in Tutoriais on</description><generator>Hugo</generator><language>pt-BR</language><lastBuildDate>Thu, 29 Oct 2026 22:48:11 -0400</lastBuildDate><atom:link href="https://escritorio.tec.br/categorias/tutoriais/index.xml" rel="self" type="application/rss+xml"/><item><title>WhatsApp | Como transformar uma conversa em Pdf</title><link>https://escritorio.tec.br/blog/2026/10/28/whatsapp-como-transformar-uma-conversa-em-pdf/</link><pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate><guid>https://escritorio.tec.br/blog/2026/10/28/whatsapp-como-transformar-uma-conversa-em-pdf/</guid><description>&lt;h3 id="passo-1-exporte-a-conversa-para-um-arquivo-txt"&gt;Passo 1: Exporte a conversa para um arquivo txt&lt;a class="td-heading-self-link" href="#passo-1-exporte-a-conversa-para-um-arquivo-txt" aria-label="Heading self-link"&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;No próprio WhatsApp:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Abra a conversa;&lt;/li&gt;
+&lt;li&gt;Toque em &lt;code&gt;⋮ &amp;gt; Mais &amp;gt; Exportar conversa&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Escolha &lt;code&gt;Sem mídia&lt;/code&gt; para gerar apenas o texto&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;O WhatsApp gerará um arquivo &lt;code&gt;Conversa do WhatsApp com...txt&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;iframe
+ srcdoc="&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;#34;pt-BR&amp;#34;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;#34;utf-8&amp;#34;&amp;gt;
+&amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width, initial-scale=1, viewport-fit=cover&amp;#34;&amp;gt;
+&amp;lt;title&amp;gt;Como exportar uma conversa&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+:root{--bg:#f3f1ec;--fg:#1f2a26;--card:#fff;--btn:#128c4a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=&amp;#34;light&amp;#34;]){--bg:#14181a;--fg:#e8ece9;--card:#222;--btn:#2aa866}}
+:root[data-theme=&amp;#34;dark&amp;#34;]{--bg:#14181a;--fg:#e8ece9;--card:#222;--btn:#2aa866}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,&amp;#34;Segoe UI&amp;#34;,Roboto,sans-serif}
+body{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px}
+h1{font-size:18px;margin:4px 0 0;text-align:center}
+#cap{min-height:26px;font-size:16px;font-weight:600;text-align:center}
+#phone{position:relative;width:360px;height:640px;max-width:100%;border-radius:28px;overflow:hidden;background:#efeae2;border:6px solid #222;box-shadow:0 8px 28px rgba(0,0,0,.3);font-family:Roboto,system-ui,sans-serif;color:#111}
+#status{height:22px;background:#e9e9e9;font-size:11px;padding:4px 12px;box-sizing:border-box;display:flex;justify-content:space-between}
+#head{height:54px;background:#f6f6f6;display:flex;align-items:center;gap:8px;padding:0 10px;box-sizing:border-box;border-bottom:1px solid #ddd}
+.av{width:36px;height:36px;border-radius:50%;background:#c5cbd0;position:relative;overflow:hidden;flex:none}
+.av:before{content:&amp;#34;&amp;#34;;position:absolute;left:11px;top:6px;width:14px;height:14px;border-radius:50%;background:#fff}
+.av:after{content:&amp;#34;&amp;#34;;position:absolute;left:6px;top:22px;width:24px;height:20px;border-radius:50%;background:#fff}
+.nm{flex:1;line-height:1.15}.nm b{font-size:15px;font-weight:500}.nm small{display:block;font-size:11px;color:#667}
+.ic{font-size:18px;width:26px;text-align:center}
+#kebab{font-size:22px;font-weight:700;width:30px;text-align:center;border-radius:50%}
+#chat{padding:10px 10px;display:flex;flex-direction:column;gap:8px}
+.b{max-width:75%;padding:6px 9px 14px;border-radius:8px;font-size:13px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.12)}
+.b i{position:absolute;right:7px;bottom:2px;font-size:9px;color:#667;font-style:normal}
+.r{background:#fff;align-self:flex-start}.s{background:#d9fdd3;align-self:flex-end}
+#bar{position:absolute;left:8px;right:8px;bottom:8px;height:40px;border-radius:20px;background:#fff;color:#888;font-size:14px;display:flex;align-items:center;padding:0 14px}
+#mic{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:50%;background:#128c4a}
+#bar{right:56px}
+.menu{position:absolute;top:76px;right:8px;background:#fff;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3);padding:4px 0;opacity:0;transform:scale(.9);transform-origin:top right;transition:.18s;pointer-events:none;font-size:14px}
+.menu.on{opacity:1;transform:none}
+.menu div{padding:11px 22px 11px 18px;white-space:nowrap;display:flex;justify-content:space-between;gap:24px}
+.menu hr{border:0;border-top:1px solid #e4e4e4;margin:3px 0}
+.menu .hl{background:#e6efe9}
+#m1{width:210px}#m2{width:190px}
+#veil{position:absolute;inset:0;background:rgba(0,0,0,.4);opacity:0;transition:.2s;pointer-events:none}
+#veil.on{opacity:1}
+#dlg{position:absolute;left:18px;right:18px;top:250px;background:#fff;border-radius:22px;padding:22px 22px 16px;font-size:14px;color:#555;opacity:0;transform:scale(.92);transition:.2s;pointer-events:none}
+#dlg.on{opacity:1;transform:none}
+#dlg p{margin:0 0 22px}
+#dlg .bt{display:flex;justify-content:space-between;font-weight:600;color:#128c4a}
+#dlg .bt span{padding:6px 4px;border-radius:8px}
+#dlg .hl{background:#e2f2e8}
+#f{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(40,40,40,.35);border:2px solid rgba(255,255,255,.9);left:300px;top:420px;transition:left .6s ease,top .6s ease,transform .12s;pointer-events:none;z-index:9}
+#f.tap{transform:scale(.7);background:rgba(40,40,40,.6)}
+button{font:inherit;padding:8px 18px;border-radius:20px;border:0;background:var(--btn);color:#fff;cursor:pointer}
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Exportar uma conversa no WhatsApp&amp;lt;/h1&amp;gt;
+&amp;lt;div id=&amp;#34;cap&amp;#34;&amp;gt;&amp;amp;nbsp;&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;#34;phone&amp;#34;&amp;gt;
+ &amp;lt;div id=&amp;#34;status&amp;#34;&amp;gt;&amp;lt;span&amp;gt;16:12&amp;lt;/span&amp;gt;&amp;lt;span&amp;gt;▲ ▮&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;head&amp;#34;&amp;gt;
+ &amp;lt;span class=&amp;#34;ic&amp;#34;&amp;gt;←&amp;lt;/span&amp;gt;&amp;lt;div class=&amp;#34;av&amp;#34;&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;nm&amp;#34;&amp;gt;&amp;lt;b&amp;gt;Contato&amp;lt;/b&amp;gt;&amp;lt;small&amp;gt;visto por último hoje às 14:28&amp;lt;/small&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;span class=&amp;#34;ic&amp;#34;&amp;gt;🎥&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;#34;ic&amp;#34;&amp;gt;📞&amp;lt;/span&amp;gt;&amp;lt;span id=&amp;#34;kebab&amp;#34;&amp;gt;⋮&amp;lt;/span&amp;gt;
+ &amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;chat&amp;#34;&amp;gt;
+ &amp;lt;div class=&amp;#34;b r&amp;#34;&amp;gt;Mensagem de exemplo recebida.&amp;lt;i&amp;gt;13:19&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;b s&amp;#34;&amp;gt;Mensagem de exemplo enviada.&amp;lt;i&amp;gt;13:27 ✓✓&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;b r&amp;#34;&amp;gt;Outra mensagem de exemplo, um pouco mais longa.&amp;lt;i&amp;gt;13:29&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;b s&amp;#34;&amp;gt;Texto de exemplo.&amp;lt;i&amp;gt;13:30 ✓✓&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;b s&amp;#34; style=&amp;#34;max-width:85%&amp;#34;&amp;gt;Texto de exemplo mais longo, apenas para ilustrar uma mensagem enviada na conversa.&amp;lt;i&amp;gt;15:39 ✓✓&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;bar&amp;#34;&amp;gt;Mensagem&amp;lt;/div&amp;gt;&amp;lt;div id=&amp;#34;mic&amp;#34;&amp;gt;&amp;lt;/div&amp;gt;
+
+ &amp;lt;div class=&amp;#34;menu&amp;#34; id=&amp;#34;m1&amp;#34;&amp;gt;
+ &amp;lt;div&amp;gt;Novo grupo&amp;lt;/div&amp;gt;&amp;lt;hr&amp;gt;
+ &amp;lt;div&amp;gt;Ver contato&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Pesquisar&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Mídia, links e docs&amp;lt;/div&amp;gt;
+ &amp;lt;div&amp;gt;Silenciar notificações&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Mensagens temporárias&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Tema da conversa&amp;lt;/div&amp;gt;&amp;lt;hr&amp;gt;
+ &amp;lt;div id=&amp;#34;mais&amp;#34;&amp;gt;Mais &amp;lt;span&amp;gt;▸&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;/div&amp;gt;
+ &amp;lt;div class=&amp;#34;menu&amp;#34; id=&amp;#34;m2&amp;#34;&amp;gt;
+ &amp;lt;div&amp;gt;Denunciar&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Bloquear&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Limpar conversa&amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;exp&amp;#34;&amp;gt;Exportar conversa&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Adicionar atalho&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;Adicionar à lista&amp;lt;/div&amp;gt;
+ &amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;veil&amp;#34;&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;dlg&amp;#34;&amp;gt;&amp;lt;p&amp;gt;Incluir mídia aumentará o tamanho da exportação da conversa.&amp;lt;/p&amp;gt;
+ &amp;lt;div class=&amp;#34;bt&amp;#34;&amp;gt;&amp;lt;span id=&amp;#34;sem&amp;#34;&amp;gt;Sem mídia&amp;lt;/span&amp;gt;&amp;lt;span id=&amp;#34;inc&amp;#34;&amp;gt;Incluir mídia&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;
+ &amp;lt;div id=&amp;#34;f&amp;#34;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;button id=&amp;#34;re&amp;#34;&amp;gt;▶ Repetir&amp;lt;/button&amp;gt;
+&amp;lt;script&amp;gt;
+const $=id=&amp;gt;document.getElementById(id),P=$(&amp;#39;phone&amp;#39;),F=$(&amp;#39;f&amp;#39;),cap=$(&amp;#39;cap&amp;#39;);
+let run=0;
+const wait=ms=&amp;gt;new Promise(r=&amp;gt;setTimeout(r,ms));
+function at(el){const p=P.getBoundingClientRect(),r=el.getBoundingClientRect();
+ F.style.left=(r.left-p.left&amp;#43;Math.min(r.width/2,60))&amp;#43;&amp;#39;px&amp;#39;;F.style.top=(r.top-p.top&amp;#43;r.height/2)&amp;#43;&amp;#39;px&amp;#39;;}
+async function tap(el,id){at(el);await wait(750);if(id!==run)return false;
+ F.classList.add(&amp;#39;tap&amp;#39;);el.classList.add(&amp;#39;hl&amp;#39;);await wait(220);F.classList.remove(&amp;#39;tap&amp;#39;);return id===run;}
+function reset(){[&amp;#39;m1&amp;#39;,&amp;#39;m2&amp;#39;,&amp;#39;dlg&amp;#39;,&amp;#39;veil&amp;#39;].forEach(i=&amp;gt;$(i).classList.remove(&amp;#39;on&amp;#39;));
+ document.querySelectorAll(&amp;#39;.hl&amp;#39;).forEach(e=&amp;gt;e.classList.remove(&amp;#39;hl&amp;#39;));
+ F.style.left=&amp;#39;300px&amp;#39;;F.style.top=&amp;#39;420px&amp;#39;;cap.innerHTML=&amp;#39;&amp;amp;nbsp;&amp;#39;;}
+async function play(){
+ const id=&amp;#43;&amp;#43;run;reset();await wait(600);if(id!==run)return;
+ cap.textContent=&amp;#39;1. Toque nos três pontos (⋮)&amp;#39;;
+ if(!await tap($(&amp;#39;kebab&amp;#39;),id))return;$(&amp;#39;kebab&amp;#39;).classList.remove(&amp;#39;hl&amp;#39;);$(&amp;#39;m1&amp;#39;).classList.add(&amp;#39;on&amp;#39;);await wait(900);
+ cap.textContent=&amp;#39;2. Toque em Mais&amp;#39;;
+ if(!await tap($(&amp;#39;mais&amp;#39;),id))return;await wait(150);$(&amp;#39;m1&amp;#39;).classList.remove(&amp;#39;on&amp;#39;);$(&amp;#39;m2&amp;#39;).classList.add(&amp;#39;on&amp;#39;);await wait(900);
+ cap.textContent=&amp;#39;3. Toque em Exportar conversa&amp;#39;;
+ if(!await tap($(&amp;#39;exp&amp;#39;),id))return;await wait(150);$(&amp;#39;m2&amp;#39;).classList.remove(&amp;#39;on&amp;#39;);$(&amp;#39;veil&amp;#39;).classList.add(&amp;#39;on&amp;#39;);$(&amp;#39;dlg&amp;#39;).classList.add(&amp;#39;on&amp;#39;);await wait(900);
+ cap.textContent=&amp;#39;4. Escolha: Sem mídia ou Incluir mídia&amp;#39;;
+ at($(&amp;#39;inc&amp;#39;));await wait(1000);at($(&amp;#39;sem&amp;#39;));await wait(1800);
+ if(id===run)setTimeout(()=&amp;gt;{if(id===run)play()},1500);
+}
+$(&amp;#39;re&amp;#39;).onclick=play;play();
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+"
+ title="Como exportar uma conversa no WhatsApp"
+ loading="lazy"
+ style="width:100%;max-width:440px;height:830px;border:0;display:block;margin:1.5rem auto;"&gt;
+&lt;/iframe&gt;
+
+&lt;h3 id="passo-2-crie-um-pdf-a-partir-do-arquivo-txt"&gt;Passo 2: Crie um Pdf a partir do arquivo txt&lt;a class="td-heading-self-link" href="#passo-2-crie-um-pdf-a-partir-do-arquivo-txt" aria-label="Heading self-link"&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Em qualquer IA, anexe o arquivo txt e faça o seguinte prompt:&lt;/p&gt;</description></item></channel></rss>

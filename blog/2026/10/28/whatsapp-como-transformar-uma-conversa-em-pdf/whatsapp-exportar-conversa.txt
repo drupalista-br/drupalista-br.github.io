@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Como exportar uma conversa</title>
+<style>
+:root{--bg:#f3f1ec;--fg:#1f2a26;--card:#fff;--btn:#128c4a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181a;--fg:#e8ece9;--card:#222;--btn:#2aa866}}
+:root[data-theme="dark"]{--bg:#14181a;--fg:#e8ece9;--card:#222;--btn:#2aa866}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px}
+h1{font-size:18px;margin:4px 0 0;text-align:center}
+#cap{min-height:26px;font-size:16px;font-weight:600;text-align:center}
+#phone{position:relative;width:360px;height:640px;max-width:100%;border-radius:28px;overflow:hidden;background:#efeae2;border:6px solid #222;box-shadow:0 8px 28px rgba(0,0,0,.3);font-family:Roboto,system-ui,sans-serif;color:#111}
+#status{height:22px;background:#e9e9e9;font-size:11px;padding:4px 12px;box-sizing:border-box;display:flex;justify-content:space-between}
+#head{height:54px;background:#f6f6f6;display:flex;align-items:center;gap:8px;padding:0 10px;box-sizing:border-box;border-bottom:1px solid #ddd}
+.av{width:36px;height:36px;border-radius:50%;background:#c5cbd0;position:relative;overflow:hidden;flex:none}
+.av:before{content:"";position:absolute;left:11px;top:6px;width:14px;height:14px;border-radius:50%;background:#fff}
+.av:after{content:"";position:absolute;left:6px;top:22px;width:24px;height:20px;border-radius:50%;background:#fff}
+.nm{flex:1;line-height:1.15}.nm b{font-size:15px;font-weight:500}.nm small{display:block;font-size:11px;color:#667}
+.ic{font-size:18px;width:26px;text-align:center}
+#kebab{font-size:22px;font-weight:700;width:30px;text-align:center;border-radius:50%}
+#chat{padding:10px 10px;display:flex;flex-direction:column;gap:8px}
+.b{max-width:75%;padding:6px 9px 14px;border-radius:8px;font-size:13px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.12)}
+.b i{position:absolute;right:7px;bottom:2px;font-size:9px;color:#667;font-style:normal}
+.r{background:#fff;align-self:flex-start}.s{background:#d9fdd3;align-self:flex-end}
+#bar{position:absolute;left:8px;right:8px;bottom:8px;height:40px;border-radius:20px;background:#fff;color:#888;font-size:14px;display:flex;align-items:center;padding:0 14px}
+#mic{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:50%;background:#128c4a}
+#bar{right:56px}
+.menu{position:absolute;top:76px;right:8px;background:#fff;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.3);padding:4px 0;opacity:0;transform:scale(.9);transform-origin:top right;transition:.18s;pointer-events:none;font-size:14px}
+.menu.on{opacity:1;transform:none}
+.menu div{padding:11px 22px 11px 18px;white-space:nowrap;display:flex;justify-content:space-between;gap:24px}
+.menu hr{border:0;border-top:1px solid #e4e4e4;margin:3px 0}
+.menu .hl{background:#e6efe9}
+#m1{width:210px}#m2{width:190px}
+#veil{position:absolute;inset:0;background:rgba(0,0,0,.4);opacity:0;transition:.2s;pointer-events:none}
+#veil.on{opacity:1}
+#dlg{position:absolute;left:18px;right:18px;top:250px;background:#fff;border-radius:22px;padding:22px 22px 16px;font-size:14px;color:#555;opacity:0;transform:scale(.92);transition:.2s;pointer-events:none}
+#dlg.on{opacity:1;transform:none}
+#dlg p{margin:0 0 22px}
+#dlg .bt{display:flex;justify-content:space-between;font-weight:600;color:#128c4a}
+#dlg .bt span{padding:6px 4px;border-radius:8px}
+#dlg .hl{background:#e2f2e8}
+#f{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(40,40,40,.35);border:2px solid rgba(255,255,255,.9);left:300px;top:420px;transition:left .6s ease,top .6s ease,transform .12s;pointer-events:none;z-index:9}
+#f.tap{transform:scale(.7);background:rgba(40,40,40,.6)}
+button{font:inherit;padding:8px 18px;border-radius:20px;border:0;background:var(--btn);color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>Exportar uma conversa no WhatsApp</h1>
+<div id="cap">&nbsp;</div>
+<div id="phone">
+  <div id="status"><span>16:12</span><span>▲ ▮</span></div>
+  <div id="head">
+    <span class="ic">←</span><div class="av"></div>
+    <div class="nm"><b>Contato</b><small>visto por último hoje às 14:28</small></div>
+    <span class="ic">🎥</span><span class="ic">📞</span><span id="kebab">⋮</span>
+  </div>
+  <div id="chat">
+    <div class="b r">Mensagem de exemplo recebida.<i>13:19</i></div>
+    <div class="b s">Mensagem de exemplo enviada.<i>13:27 ✓✓</i></div>
+    <div class="b r">Outra mensagem de exemplo, um pouco mais longa.<i>13:29</i></div>
+    <div class="b s">Texto de exemplo.<i>13:30 ✓✓</i></div>
+    <div class="b s" style="max-width:85%">Texto de exemplo mais longo, apenas para ilustrar uma mensagem enviada na conversa.<i>15:39 ✓✓</i></div>
+  </div>
+  <div id="bar">Mensagem</div><div id="mic"></div>
+
+  <div class="menu" id="m1">
+    <div>Novo grupo</div><hr>
+    <div>Ver contato</div><div>Pesquisar</div><div>Mídia, links e docs</div>
+    <div>Silenciar notificações</div><div>Mensagens temporárias</div><div>Tema da conversa</div><hr>
+    <div id="mais">Mais <span>▸</span></div>
+  </div>
+  <div class="menu" id="m2">
+    <div>Denunciar</div><div>Bloquear</div><div>Limpar conversa</div>
+    <div id="exp">Exportar conversa</div><div>Adicionar atalho</div><div>Adicionar à lista</div>
+  </div>
+  <div id="veil"></div>
+  <div id="dlg"><p>Incluir mídia aumentará o tamanho da exportação da conversa.</p>
+    <div class="bt"><span id="sem">Sem mídia</span><span id="inc">Incluir mídia</span></div></div>
+  <div id="f"></div>
+</div>
+<button id="re">▶ Repetir</button>
+<script>
+const $=id=>document.getElementById(id),P=$('phone'),F=$('f'),cap=$('cap');
+let run=0;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function at(el){const p=P.getBoundingClientRect(),r=el.getBoundingClientRect();
+  F.style.left=(r.left-p.left+Math.min(r.width/2,60))+'px';F.style.top=(r.top-p.top+r.height/2)+'px';}
+async function tap(el,id){at(el);await wait(750);if(id!==run)return false;
+  F.classList.add('tap');el.classList.add('hl');await wait(220);F.classList.remove('tap');return id===run;}
+function reset(){['m1','m2','dlg','veil'].forEach(i=>$(i).classList.remove('on'));
+  document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));
+  F.style.left='300px';F.style.top='420px';cap.innerHTML='&nbsp;';}
+async function play(){
+  const id=++run;reset();await wait(600);if(id!==run)return;
+  cap.textContent='1. Toque nos três pontos (⋮)';
+  if(!await tap($('kebab'),id))return;$('kebab').classList.remove('hl');$('m1').classList.add('on');await wait(900);
+  cap.textContent='2. Toque em Mais';
+  if(!await tap($('mais'),id))return;await wait(150);$('m1').classList.remove('on');$('m2').classList.add('on');await wait(900);
+  cap.textContent='3. Toque em Exportar conversa';
+  if(!await tap($('exp'),id))return;await wait(150);$('m2').classList.remove('on');$('veil').classList.add('on');$('dlg').classList.add('on');await wait(900);
+  cap.textContent='4. Escolha: Sem mídia ou Incluir mídia';
+  at($('inc'));await wait(1000);at($('sem'));await wait(1800);
+  if(id===run)setTimeout(()=>{if(id===run)play()},1500);
+}
+$('re').onclick=play;play();
+</script>
+</body>
+</html>
