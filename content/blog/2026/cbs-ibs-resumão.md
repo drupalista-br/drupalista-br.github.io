@@ -1,17 +1,17 @@
 ---
-title: "CBS e IBS | Reforma Tributária"
+title: "Cbs e Ibs | Reforma Tributária - Resumão"
 date: 2026-08-12
 author: '[Francisco Luz](/contato/#fundador-e-ceo#_blank)'
 description: >
-  Resumo prático da legislação da Reforma Tributária do consumo, com referências à CBS e ao IBS, ao Simples Nacional, às alíquotas e reduções, aos créditos tributários, às regras para produtores rurais e aos procedimentos de apuração.
+  Resumo prático da legislação da Reforma Tributária do consumo, com referências à Cbs e ao IBS, ao Simples Nacional, às alíquotas e reduções, aos créditos tributários, às regras para produtores rurais e aos procedimentos de apuração.
 categorias: ["Resumão da Legislação"]
 ---
 
 ## 1. Legislação
 
-- Institui a CBS e o IBS: [LC nº 214/2025](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm).
-  - Regulamento da CBS: [Decreto nº 12.955/2026](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d12955.htm).
-  - Regulamento do IBS: [Resolução CGIBS nº 6/2026](https://www.cgibs.gov.br/upload/arquivos/202604/30084927-res-cgibs-n-6-30-abr-2026-regulamenta-o-ibs.pdf).
+- Institui a Cbs e o Ibs: [LC nº 214/2025](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm).
+  - Regulamento da Cbs: [Decreto nº 12.955/2026](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d12955.htm).
+  - Regulamento do Ibs: [Resolução CGIBS nº 6/2026](https://www.cgibs.gov.br/upload/arquivos/202604/30084927-res-cgibs-n-6-30-abr-2026-regulamenta-o-ibs.pdf).
 - Institui o Simples Nacional: [LC nº 123/2006](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm).
   - Alterações relacionadas à reforma: [LC nº 227/2026](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp227.htm#art166).
   - Regulamento do Simples Nacional: [Resolução CGSN nº 140/2018](https://normasinternet2.receita.fazenda.gov.br/#/consulta/externa/92278).
@@ -19,9 +19,9 @@ categorias: ["Resumão da Legislação"]
 
 ## 2. Simples Nacional
 
-### Destaque da CBS e do IBS nos documentos fiscais
+### Destaque da Cbs e do Ibs nos documentos fiscais
 
-- O destaque da CBS e do IBS será obrigatório em todas as notas fiscais emitidas pela empresa, mesmo que ela **não** tenha optado pelo regime híbrido.
+- O destaque da Cbs e do Ibs é obrigatório em todas as notas fiscais emitidas pela empresa, mesmo que ela **não** tenha optado pelo regime híbrido.
   - §§ 1º-A e 2º do [art. 23](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm#art23) da LC nº 123/2006, a serem introduzidos em 2027 pela [LC nº 227/2026](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp227.htm#art168).
   - As notas fiscais conterão as alíquotas indicadas no item 4, na subseção “Simples Nacional | Por dentro do DAS — regime puro”.
 
@@ -65,7 +65,7 @@ Art. 40-D da Resolução CGSN nº 140/2018.
 
 ### Regime regular e Simples Nacional no regime híbrido
 
-- **0,10% — IBS:** [art. 344](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art344).
+- **0,10% — Ibs:** [art. 344](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art344).
 - **CBS — alíquota a definir:** [art. 349](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art349).
   - Segundo o [G1](https://g1.globo.com/economia/noticia/2026/08/08/reforma-tributaria-cobranca-de-novos-impostos-sobre-consumo-comeca-em-2027-veja-como-vai-funcionar-e-o-que-falta-definir.ghtml), a alíquota será definida em dezembro de 2026 e ficará em torno de 9,2%.
 
@@ -113,7 +113,7 @@ Art. 40-D da Resolução CGSN nº 140/2018.
 ### Diferimentos
 
 - Insumos agropecuários e aquícolas: [art. 138](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art138).
-  - Quando vendidos a produtor rural ou a empresa.
+  - Quando vendidos a produtor rural ou a empresa rural.
   - Quando o comprador for pessoa física e não for produtor rural, a operação será tributada com redução de alíquota de 60%.
     - Exemplo: compra de fertilizante para o jardim doméstico.
 
@@ -125,8 +125,8 @@ Art. 40-D da Resolução CGSN nº 140/2018.
   - `X = RBT12 × alíquota nominal`, conforme a [planilha de alíquotas nominais](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=635948126#gid=635948126&range=D1).
   - `X = X − parcela a deduzir`, conforme a [planilha de parcelas a deduzir](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=635948126#gid=635948126&range=E1).
   - `Alíquota integral = X ÷ RBT12`.
-  - `Alíquota da CBS = alíquota integral × percentual de distribuição da CBS`, disponível [nesta planilha](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=1259148671#gid=1259148671&range=D1).
-  - `Alíquota do IBS = alíquota integral × percentual de distribuição do IBS`, disponível [nesta planilha](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=1259148671#gid=1259148671&range=E1).
+  - `Alíquota da Cbs = alíquota integral × percentual de distribuição da Cbs`, disponível [nesta planilha](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=1259148671#gid=1259148671&range=D1).
+  - `Alíquota do Ibs = alíquota integral × percentual de distribuição do Ibs`, disponível [nesta planilha](https://docs.google.com/spreadsheets/d/1gljGgt3PodBrUobwqkduI39RT4H18UhnENUmDfZEh4M/edit?gid=1259148671#gid=1259148671&range=E1).
 
 - Não há direito à redução das alíquotas.
 
@@ -147,7 +147,7 @@ Art. 40-D da Resolução CGSN nº 140/2018.
 
 - Aplicável somente ao regime regular e ao Simples Nacional no regime híbrido.
 - Os créditos presumidos podem ser apropriados nas aquisições de:
-  - produtor rural não contribuinte da CBS e do IBS: [art. 168](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art168).
+  - produtor rural não contribuinte da Cbs e do Ibs: [art. 168](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art168).
     - A definição de produtor rural não contribuinte está no [art. 164](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art164).
   - transportador autônomo: [art. 169](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art169);
   - materiais coletados por catadores: [art. 170](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art170);
@@ -199,19 +199,19 @@ A empresa não poderá apropriar créditos relativos a:
 - [CBS](https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/manuais/reforma-tributaria-do-consumo/manual-plataforma-cbs-21-maio-2026-07h40.pdf/view).
 - [IBS](https://www.servicos.cgibs.gov.br/artigo/495FBB9A8E1E24B0E06355CC17ACA70D/2).
 
-### Extinção dos débitos de CBS e IBS declarados no XML do documento fiscal
+### Extinção dos débitos de Cbs e Ibs declarados no XML do documento fiscal
 
 Os débitos poderão ser extintos por uma ou mais das seguintes formas:
 
-- utilização de créditos disponíveis nas contas correntes da CBS e do IBS: [art. 27, inciso I](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art27);
+- utilização de créditos disponíveis nas contas correntes da Cbs e do Ibs: [art. 27, inciso I](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art27);
   - Os créditos somente poderão ser aproveitados após a extinção do débito: [art. 47, § 2º, inciso I](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art47);
 - *split payment*: [arts. 31 a 35](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art31);
   - Simples Nacional: art. 45-B da Resolução CGSN nº 140/2018;
 - recolhimento pelo adquirente sujeito ao regime regular: [art. 36](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art36);
 - apuração mensal do saldo a recolher: [art. 29](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm#art29).
   - O pagamento deverá ser realizado até o último dia útil do mês seguinte ao da apuração:
-    - art. 45 do [regulamento da CBS](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d12955.htm#art45);
-    - art. 45 do regulamento do IBS.
+    - art. 45 do [regulamento da Cbs](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d12955.htm#art45);
+    - art. 45 do regulamento do Ibs.
 
 ## 8. Crédito presumido de PIS/Cofins sobre o estoque em 31/12/2026
 

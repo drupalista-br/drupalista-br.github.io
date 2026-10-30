@@ -38,8 +38,8 @@ Insert `{{< debug >}}`. It will print `/layouts/shortcodes/debug.html`
 
 ## Instalation
 1. Place `https://github.com/docsy/docsy/tree/v0.18.0/theme` at `/theme`;
-2. Place `master` repo at at `/website/master`;
-3. Place `master-public` repo at at `/website/master-public`;
+2. Place `drafts` repo at at `/website/drafts`;
+3. Place `public-builder` repo at at `/website/public-builder`;
 
 
 

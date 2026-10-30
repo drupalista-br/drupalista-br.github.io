@@ -1,0 +1,11 @@
+{{- $nome := .Get "src" -}}
+{{- $res := .Page.Resources.Get $nome -}}
+{{- if not $res -}}
+  {{- errorf "animacao: recurso %q não encontrado em %s" $nome .Page.File.Path -}}
+{{- end -}}
+<iframe
+  srcdoc="{{ $res.Content | htmlEscape | safeHTML }}"
+  title="{{ .Get "titulo" | default "Animação" }}"
+  loading="lazy"
+  style="width:100%;max-width:440px;height:{{ .Get "altura" | default "830" }}px;border:0;display:block;margin:1.5rem auto;">
+</iframe>
